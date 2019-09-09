@@ -1,0 +1,29 @@
+{
+  "name": "n-send",
+  "version": "0.0.0",
+  "description": "TODO",
+  "main": "TODO",
+  "files": [
+    "TODO"
+  ],
+  "scripts": {
+    "lint": "eslint --ext .js src/ test/",
+    "test": "NODE_ENV=test mocha",
+    "coverage": "nyc npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexanderMac/n-send.git"
+  },
+  "keywords": [
+    "TODO"
+  ],
+  "author": "Alexander Mac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexanderMac/n-send/issues"
+  },
+  "homepage": "https://github.com/AlexanderMac/n-send#readme",
+  "dependencies": {},
+  "devDependencies": {}
+}
