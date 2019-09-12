@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "8"
+  - "10"
+  - "12"
+  - "node"
+
+install:
+  - npm install
+  - npm install -g codecov istanbul
+script:
+  - npm run lint
+  - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+  - codecov
+
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: always # default: always
+
+cache:
+  directories:
+    - node_modules

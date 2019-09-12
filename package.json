@@ -1,11 +1,15 @@
 {
   "name": "n-send",
   "version": "0.0.0",
-  "description": "TODO",
-  "main": "TODO",
+  "description": "Node http(s) request sender",
+  "main": "index.js",
   "files": [
-    "TODO"
+    "index.js",
+    "src"
   ],
+  "engines": {
+    "node": ">=8"
+  },
   "scripts": {
     "lint": "eslint --ext .js src/ test/",
     "test": "NODE_ENV=test mocha",
@@ -16,7 +20,12 @@
     "url": "git+https://github.com/AlexanderMac/n-send.git"
   },
   "keywords": [
-    "TODO"
+    "node",
+    "http",
+    "https",
+    "http-client",
+    "request",
+    "request-sender"
   ],
   "author": "Alexander Mac",
   "license": "MIT",
@@ -24,6 +33,12 @@
     "url": "https://github.com/AlexanderMac/n-send/issues"
   },
   "homepage": "https://github.com/AlexanderMac/n-send#readme",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "mocha": "^6.2.0",
+    "should": "^13.2.3"
+  }
 }

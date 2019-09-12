@@ -5,16 +5,80 @@
 [![npm version](https://badge.fury.io/js/n-send.svg)](https://badge.fury.io/js/n-send)
 
 ## Features
-TODO
 
-## Commands
-TODO
+- Simple configuration
+- Promise API
+- Proxy support (TODO)
+- Follows redirects (TODO)
+- Request cancelation (TODO)
+- Retries on failure (TODO)
+- Timeout handling
 
 ## Usage
-TODO
+```js
+const nsend = require('nsend');
+
+let res1 = await nsend(opts);
+// OR
+let ns = nsend.getInstance(opts);
+let res2 = await nsend.send();
+```
 
 ## API
-TODO
+
+### NSend Options
+
+```js
+{
+  // `baseURL` to resolve against if the input is not absolute
+  baseURL: 'https://example.com/api',
+
+  // `url` is the server URL that will be used for the request
+  url: '/users',
+
+  // `method` is the request method to be used when making the request
+  method: 'get', // default
+
+  // `headers` are custom headers to be sent in `name: value` format
+  headers: { 'Connection': 'keep-alive' },
+
+  // `params` are the URL parameters to be sent with the request
+  // Must be a plain object or a URLSearchParams object
+  params: {
+    ts: 7567182746126
+  },
+
+  // `data` is the data to be sent as the request body
+  // Only applicable for request methods 'POST', 'PUT', 'PATCH'
+  data: {
+    username: 'smith'
+  },
+
+  // `timeout` specifies the number of milliseconds before the request times out
+  timeout: 0, // default
+
+  // `auth` indicates that HTTP Basic auth should be used, and supplies credentials
+  // This will set an `Authorization` header, overwriting any existing
+  // `Authorization` custom headers you have set using `headers`
+  auth: {
+    username: 'smith',
+    password: 'password'
+  },
+
+  // `responseType` indicates the type of data that the server will respond with
+  // options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
+  responseType: 'json', // default
+
+  // `responseEncoding` indicates encoding to use for decoding responses
+  // Note: Ignored for `responseType` of 'stream'
+  responseEncoding: 'utf8', // default
+
+  // `maxContentLength` defines the max size of the http response content in bytes allowed
+  maxContentLength: 10000, // default
+
+  // `maxRedirects` defines the maximum number of redirects to follow, if set to 0, no redirects will be followed
+  maxRedirects: 0, // default
+```
 
 ## Author
 Alexander Mac
