@@ -43,13 +43,21 @@ let res2 = await nsend.send();
   headers: { 'Connection': 'keep-alive' },
 
   // `params` are the URL parameters to be sent with the request
-  // Must be a plain object or a URLSearchParams object
+  // Must be a plain object
   params: {
     ts: 7567182746126
   },
 
+  // `auth` indicates that HTTP Basic auth should be used
+  // This will set an `Authorization` header, overwriting any existing
+  auth: {
+    username: 'smith',
+    password: 'password'
+  },
+
   // `data` is the data to be sent as the request body
   // Only applicable for request methods 'POST', 'PUT', 'PATCH'
+  // Should be a `ReadStream`, `Buffer` or `String`
   data: {
     username: 'smith'
   },
@@ -57,27 +65,19 @@ let res2 = await nsend.send();
   // `timeout` specifies the number of milliseconds before the request times out
   timeout: 0, // default
 
-  // `auth` indicates that HTTP Basic auth should be used, and supplies credentials
-  // This will set an `Authorization` header, overwriting any existing
-  // `Authorization` custom headers you have set using `headers`
-  auth: {
-    username: 'smith',
-    password: 'password'
-  },
+  // `maxContentLength` defines the max size of the http response content in bytes allowed
+  maxContentLength: 10000, // default
+
+  // `maxRedirects` defines the maximum number of redirects to follow, if set to 0, no redirects will be followed
+  maxRedirects: 0 // default
 
   // `responseType` indicates the type of data that the server will respond with
-  // options are: 'arraybuffer', 'document', 'json', 'text', 'stream'
+  // options are: 'json', 'text', 'stream'
   responseType: 'json', // default
 
   // `responseEncoding` indicates encoding to use for decoding responses
   // Note: Ignored for `responseType` of 'stream'
   responseEncoding: 'utf8', // default
-
-  // `maxContentLength` defines the max size of the http response content in bytes allowed
-  maxContentLength: 10000, // default
-
-  // `maxRedirects` defines the maximum number of redirects to follow, if set to 0, no redirects will be followed
-  maxRedirects: 0, // default
 ```
 
 ## Author

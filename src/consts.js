@@ -3,7 +3,7 @@ const DEFAULT_OPTS = {
   maxContentLength: 10000,
   maxRedirects: 0,
   responseType: 'text',
-  responseEncoding: 'UTF-8'
+  responseEncoding: 'utf8'
 };
 
 const ALLOWED_OPT_KEYS = [

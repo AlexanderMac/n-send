@@ -19,13 +19,18 @@ class NSendAdapter {
       this.reject = reject;
       this._performRequest();
     }).finally(() => {
-      this.req.finalize();
+      if (this.req) {
+        this.req.finalize();
+        // To prevent possibly memory leaks
+        this.req.processResponse = null;
+        this.req = null;
+      }
     });
   }
 
   _performRequest() {
     let opts = this._getOpts(['protocol', 'timeout']);
-    opts.reqOps = this._getReqOpts();
+    opts.reqOpts = this._getReqOpts();
     opts.data = this.opts.data;
     opts.resolve = this.resolve;
     opts.reject = this.reject;
@@ -36,9 +41,10 @@ class NSendAdapter {
   _processResponse(res) {
     let opts = this._getOpts(['maxContentLength', 'responseType', 'responseEncoding']);
     opts.req = this.req;
+    opts.res = res;
     opts.resolve = this.resolve;
     opts.reject = this.reject;
-    this.res = response.processResponse(res);
+    response.processResponse(opts);
   }
 
   _getOpts(pickOpts) {

@@ -1,3 +1,4 @@
+const _          = require('lodash');
 const zlib       = require('zlib');
 const NSendError = require('../error');
 
@@ -7,8 +8,9 @@ class NSendResponse {
     return instance.processResponse();
   }
 
-  constructor({ req, maxContentLength, responseType, responseEncoding, resolve, reject }) {
+  constructor({ req, res, maxContentLength, responseType, responseEncoding, resolve, reject }) {
     this.req = req;
+    this.res = res;
     this.maxContentLength = maxContentLength;
     this.responseType = responseType;
     this.responseEncoding = responseEncoding;
@@ -16,28 +18,28 @@ class NSendResponse {
     this.reject = reject;
   }
 
-  processResponse(res) {
+  processResponse() {
     if (this.req.aborted) {
       return;
     }
 
     // uncompress the response body transparently if required
-    this.resStream = res;
-    switch (res.headers['content-encoding']) {
+    this.resStream = this.res;
+    switch (this.res.headers['content-encoding']) {
       case 'gzip':
       case 'compress':
       case 'deflate':
         // add the unzipper to the body stream processing pipeline
-        this.resStream = res.statusCode === 204 ? this.resStream : this.resStream.pipe(zlib.createUnzip());
+        this.resStream = this.res.statusCode === 204 ? this.resStream : this.resStream.pipe(zlib.createUnzip());
         // remove the content-encoding in order to not confuse downstream operations
-        delete res.headers['content-encoding'];
+        delete this.res.headers['content-encoding'];
         break;
     }
 
     this.response = {
-      status: res.statusCode,
-      statusText: res.statusMessage,
-      headers: res.headers,
+      status: this.res.statusCode,
+      statusText: this.res.statusMessage,
+      headers: this.res.headers,
       request: this.req
     };
     if (this.responseType === 'stream') {
@@ -66,17 +68,20 @@ class NSendResponse {
 
     this.resStream.on('end', () => {
       let responseData = Buffer.concat(responseBuffer);
-      if (this.responseType !== 'arraybuffer') {
-        responseData = responseData.toString(this.responseEncoding);
-      }
-
+      responseData = responseData.toString(this.responseEncoding);
       this.response.data = this._transformResponseData(responseData);
       this.resolve(this.response);
     });
   }
 
   _transformResponseData(data) {
-    // TODO: implement
+    if (this.responseType === 'json') {
+      let res = _.attempt(JSON.parse.bind(null, data));
+      if (_.isError(res)) {
+        return this.reject(new NSendError('Unable to parse json response: ' + res.toString()));
+      }
+      return res;
+    }
     return data;
   }
 }

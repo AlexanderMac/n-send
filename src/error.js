@@ -1,8 +1,4 @@
 module.exports = class NSendError extends Error {
-  static get(...params) {
-    return new NSendError(...params);
-  }
-
   constructor(message, details) {
     super(message);
 

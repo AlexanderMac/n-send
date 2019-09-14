@@ -25,10 +25,11 @@ class NSendRequestOptionsBuilder {
   }
 
   _parseUrl() {
-    let parsedUrl = new URL(this.inputBaseUrl, this.inputUrl);
+    // TODO: add protocol if missing to inputUrl or inputBaseUrl
+    let parsedUrl = new URL(this.inputUrl, this.inputBaseUrl);
 
     this.protocol = parsedUrl.protocol;
-    this.host = parsedUrl.host;
+    this.host = parsedUrl.hostname;
     this.port = parsedUrl.port;
     this.username = parsedUrl.username;
     this.password = parsedUrl.password;
@@ -46,16 +47,15 @@ class NSendRequestOptionsBuilder {
     }
   }
 
+  // TODO: accoring node.js docs auth <string> used to compute an Authorization header
   _parseAuth() {
     if (this.inputAuth) {
       let username = _.toString(this.inputAuth.username);
       let password = _.toString(this.inputAuth.password);
       this.auth = username + ':' + password;
     } else if (this.username || this.password) {
+      // TODO: basic authentication using the URL itself, as detailed in RFC 1738, will be lost here:
       this.auth = this.username + ':' + this.password;
-    }
-    if (this.auth) {
-      delete this.inputHeaders.authorization; // TODO: maybe leave?
     }
   }
 
