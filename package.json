@@ -1,7 +1,7 @@
 {
   "name": "n-send",
-  "version": "0.0.0",
-  "description": "Node http(s) request sender",
+  "version": "0.1.0",
+  "description": "Node http(s) request client",
   "main": "index.js",
   "files": [
     "index.js",
@@ -25,7 +25,7 @@
     "https",
     "http-client",
     "request",
-    "request-sender"
+    "request-client"
   ],
   "author": "Alexander Mac",
   "license": "MIT",
