@@ -1,7 +1,6 @@
 const _      = require('lodash');
 const http   = require('http');
 const url    = require('url');
-const zlib   = require('zlib');
 const fs     = require('fs');
 const path   = require('path');
 const should = require('should');
@@ -390,29 +389,29 @@ describe('functional tests', () => {
   });
 
   describe('maxRedirects', () => {
-    it.skip('should use opts.maxRedirects and don not abort req (not exceeded)', (done) => {
+    it.skip('should use opts.maxRedirects and don not abort req (not exceeded)', () => {
     });
 
-    it.skip('should use opts.maxRedirects and abort req (exceeded)', (done) => {
+    it.skip('should use opts.maxRedirects and abort req (exceeded)', () => {
     });
   });
 
   describe('responseType', () => {
-    it.skip('should use opts.responseType=json', (done) => {
+    it.skip('should use opts.responseType=json', () => {
     });
 
-    it.skip('should use opts.responseType=text', (done) => {
+    it.skip('should use opts.responseType=text', () => {
     });
 
-    it.skip('should use opts.responseType=stream', (done) => {
+    it.skip('should use opts.responseType=stream', () => {
     });
   });
 
   describe('responseEncoding', () => {
-    it.skip('should use opts.responseEncoding=utf8', (done) => {
+    it.skip('should use opts.responseEncoding=utf8', () => {
     });
 
-    it.skip('should use opts.responseEncoding=utf16', (done) => {
+    it.skip('should use opts.responseEncoding=utf16', () => {
     });
   });
 });

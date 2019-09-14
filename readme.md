@@ -78,6 +78,7 @@ let res2 = await nsend.send();
   // `responseEncoding` indicates encoding to use for decoding responses
   // Note: Ignored for `responseType` of 'stream'
   responseEncoding: 'utf8', // default
+}
 ```
 
 ## Author
