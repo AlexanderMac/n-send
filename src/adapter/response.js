@@ -30,7 +30,9 @@ class NSendResponse {
       case 'compress':
       case 'deflate':
         // add the unzipper to the body stream processing pipeline
-        this.resStream = this.res.statusCode === 204 ? this.resStream : this.resStream.pipe(zlib.createUnzip());
+        this.resStream = this.res.statusCode === 204 ?
+          this.resStream :
+          this.resStream.pipe(zlib.createUnzip());
         // remove the content-encoding in order to not confuse downstream operations
         delete this.res.headers['content-encoding'];
         break;
@@ -50,10 +52,10 @@ class NSendResponse {
   }
 
   _processResponseStream() {
-    let responseBuffer = [];
+    let resDataBuffer = [];
     this.resStream.on('data', chunk => {
-      responseBuffer.push(chunk);
-      if (this.maxContentLength > -1 && Buffer.concat(responseBuffer).length > this.maxContentLength) {
+      resDataBuffer.push(chunk);
+      if (this.maxContentLength > -1 && Buffer.concat(resDataBuffer).length > this.maxContentLength) {
         this.resStream.destroy();
         this.reject(new NSendError('MaxContentLength size of ' + this.maxContentLength + ' exceeded'));
       }
@@ -67,9 +69,8 @@ class NSendResponse {
     });
 
     this.resStream.on('end', () => {
-      let responseData = Buffer.concat(responseBuffer);
-      responseData = responseData.toString(this.responseEncoding);
-      this.response.data = this._transformResponseData(responseData);
+      let resData = Buffer.concat(resDataBuffer).toString(this.responseEncoding);
+      this.response.data = this._transformResponseData(resData);
       this.resolve(this.response);
     });
   }

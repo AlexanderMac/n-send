@@ -43,10 +43,8 @@ describe('functional tests', () => {
         .resolve()
         .then(async () => {
           let res = await nsend(opts);
-          let resData = _.attempt(JSON.parse.bind(null, res.data));
-
           should(res.status).equal(status);
-          should(resData).eql(expected);
+          should(res.data).eql(expected);
           done();
         })
         .catch(err => {
@@ -82,10 +80,11 @@ describe('functional tests', () => {
     it('should use opts.url', (done) => {
       let opts = {
         method: 'GET',
-        url: 'http://localhost:8008/users/1'
+        url: 'http://localhost:8008/users/1',
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1',
         headers: {
@@ -95,17 +94,18 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.url and opts.baseUrl', (done) => {
       let opts = {
         method: 'GET',
         url: '/users/1',
-        baseUrl: 'http://localhost:8008'
+        baseUrl: 'http://localhost:8008',
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1',
         headers: {
@@ -115,7 +115,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.params', (done) => {
@@ -124,10 +124,11 @@ describe('functional tests', () => {
         url: 'http://localhost:8008/users/1',
         params: {
           ts: 123123123123
-        }
+        },
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1?ts=123123123123',
         headers: {
@@ -137,7 +138,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.params and opts.url.query', (done) => {
@@ -146,10 +147,11 @@ describe('functional tests', () => {
         url: 'http://localhost:8008/users/1?token=sometoken',
         params: {
           ts: 123123123123
-        }
+        },
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1?token=sometoken&ts=123123123123',
         headers: {
@@ -159,7 +161,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.auth', (done) => {
@@ -169,10 +171,11 @@ describe('functional tests', () => {
         auth: {
           username: 'admin',
           password: 'pass'
-        }
+        },
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1',
         headers: {
@@ -183,7 +186,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.headers', (done) => {
@@ -194,10 +197,11 @@ describe('functional tests', () => {
           'Accept': 'text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8',
           'Accept-Language': 'en-US, en;q=0.5',
           'Connection': 'keep-alive'
-        }
+        },
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1',
         headers: {
@@ -209,7 +213,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
   });
 
@@ -229,10 +233,11 @@ describe('functional tests', () => {
       let opts = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
-        timeout: 50
+        timeout: 50,
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users/1',
         headers: {
@@ -242,19 +247,20 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(20), _test(opts, status, data, done));
+      _createServer(handler(20), _test(opts, status, expected, done));
     });
 
     it('should use opts.timeout and abort req (exceeded)', (done) => {
       let opts = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
-        timeout: 50
+        timeout: 50,
+        responseType: 'json'
       };
       let status = 200;
-      let data = new nsend.NSendError('Timeout of 50ms exceeded');
+      let expected = new nsend.NSendError('Timeout of 50ms exceeded');
 
-      _createServer(handler(100), _test(opts, status, data, done));
+      _createServer(handler(100), _test(opts, status, expected, done));
     });
   });
 
@@ -277,10 +283,11 @@ describe('functional tests', () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        data: { name: 'user2' }
+        data: { name: 'user2' },
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'POST',
         url: '/users',
         headers: {
@@ -292,7 +299,7 @@ describe('functional tests', () => {
         data: '{"name":"user2"}'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should send the Buffer data', (done) => {
@@ -302,10 +309,11 @@ describe('functional tests', () => {
         headers: {
           'Content-Type': 'text/plain'
         },
-        data: Buffer.from('{"name":"user22"}')
+        data: Buffer.from('{"name":"user22"}'),
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'PUT',
         url: '/users',
         headers: {
@@ -317,7 +325,7 @@ describe('functional tests', () => {
         data: '{"name":"user22"}'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
     it.skip('should send the Stream data', (done) => {
@@ -325,10 +333,11 @@ describe('functional tests', () => {
       let opts = {
         method: 'PATCH',
         url: 'http://localhost:8008/users',
-        data: fs.createReadStream(path.resolve(__dirname, 'data.txt'))
+        data: fs.createReadStream(path.resolve(__dirname, 'data.txt')),
+        responseType: 'json'
       };
       let status = 200;
-      let data = {
+      let expected = {
         method: 'PATCH',
         url: '/users',
         headers: {
@@ -338,7 +347,7 @@ describe('functional tests', () => {
         data: '{"name":"user23"}'
       };
 
-      _createServer(handler(), _test(opts, status, data, done));
+      _createServer(handler(), _test(opts, status, expected, done));
     });
   });
 
@@ -359,10 +368,11 @@ describe('functional tests', () => {
       let opts = {
         method: 'GET',
         url: 'http://localhost:8008/users',
-        maxContentLength: 120
+        maxContentLength: 120,
+        responseType: 'json'
       };
       let status = 201;
-      let data = {
+      let expected = {
         method: 'GET',
         url: '/users',
         headers: {
@@ -372,19 +382,20 @@ describe('functional tests', () => {
         data: '0123456789'
       };
 
-      _createServer(handler(10), _test(opts, status, data, done));
+      _createServer(handler(10), _test(opts, status, expected, done));
     });
 
     it('should use opts.maxContentLength and abort req (exceeded)', (done) => {
       let opts = {
         method: 'GET',
         url: 'http://localhost:8008/users',
-        maxContentLength: 120
+        maxContentLength: 120,
+        responseType: 'json'
       };
       let status = 201;
-      let data = new nsend.NSendError('MaxContentLength size of 120 exceeded');
+      let expected = new nsend.NSendError('MaxContentLength size of 120 exceeded');
 
-      _createServer(handler(30), _test(opts, status, data, done));
+      _createServer(handler(30), _test(opts, status, expected, done));
     });
   });
 
@@ -397,13 +408,92 @@ describe('functional tests', () => {
   });
 
   describe('responseType', () => {
-    it.skip('should use opts.responseType=json', () => {
+    function handler() {
+      return (req, res) => {
+        let parsedUrl = url.parse(req.url);
+        if (parsedUrl.pathname === '/users/1') {
+          _sendSuccess(req, res, 200, { user: 'user1' });
+        } else {
+          _sendNotFound(res);
+        }
+      };
+    }
+
+    it('should use opts.responseType=json', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/users/1',
+        responseType: 'json'
+      };
+      let status = 200;
+      let expected = {
+        method: 'GET',
+        url: '/users/1',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        },
+        data: { user: 'user1' }
+      };
+
+      _createServer(handler(30), _test(opts, status, expected, done));
     });
 
-    it.skip('should use opts.responseType=text', () => {
+    it('should use opts.responseType=text', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/users/1',
+        responseType: 'text'
+      };
+      let status = 200;
+      let expected = JSON.stringify({
+        method: 'GET',
+        url: '/users/1',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        },
+        data: { user: 'user1' }
+      });
+
+      _createServer(handler(30), _test(opts, status, expected, done));
     });
 
-    it.skip('should use opts.responseType=stream', () => {
+    it('should use opts.responseType=stream', (done) => {
+      async function test() {
+        let opts = {
+          method: 'GET',
+          url: 'http://localhost:8008/users/1',
+          responseType: 'stream'
+        };
+        let status = 200;
+        let expected = JSON.stringify({
+          method: 'GET',
+          url: '/users/1',
+          headers: {
+            host: 'localhost:8008',
+            connection: 'close'
+          },
+          data: { user: 'user1' }
+        });
+
+        let res = await nsend(opts);
+
+        let resDataBuffer = [];
+        res.data.on('data', chunk => resDataBuffer.push(chunk));
+        res.data.on('end', () => {
+          let resData = Buffer.concat(resDataBuffer).toString();
+          try {
+            should(res.status).equal(status);
+            should(resData).eql(expected);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      }
+
+      _createServer(handler(30), test);
     });
   });
 
