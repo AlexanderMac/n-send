@@ -34,17 +34,34 @@ describe('adapter / main', () => {
   });
 
   describe('performRequest', () => {
-    it('should create and return a promise, call internal _performRequest and cleanup req in finally block', async () => {
+    it('should return promise, call internal _performRequest and _cleanup (resolve case)', async () => {
       let res = 'res';
       let instance = getInstance();
       sinon.stub(instance, '_performRequest').callsFake(() => instance.resolve(res));
+      sinon.stub(instance, '_cleanup');
 
       let actual = await instance.performRequest();
 
       let expected = res;
       nassert.assert(actual, expected);
-      nassert.assert(instance.req, null);
       nassert.assertFn({ inst: instance, fnName: '_performRequest', expectedArgs: '_without-args_' });
+      nassert.assertFn({ inst: instance, fnName: '_cleanup', expectedArgs: '_without-args_' });
+    });
+
+    it('should return promise, call internal _performRequest and _cleanup (reject case)', async () => {
+      let res = new Error('Some error');
+      let instance = getInstance();
+      sinon.stub(instance, '_performRequest').callsFake(() => instance.reject(res));
+      sinon.stub(instance, '_cleanup');
+
+      try {
+        await instance.performRequest();
+      } catch (err) {
+        nassert.assert(err, res);
+      }
+
+      nassert.assertFn({ inst: instance, fnName: '_performRequest', expectedArgs: '_without-args_' });
+      nassert.assertFn({ inst: instance, fnName: '_cleanup', expectedArgs: '_without-args_' });
     });
   });
 
@@ -188,6 +205,25 @@ describe('adapter / main', () => {
 
       nassert.assert(actual, 'reqOpts');
       nassert.assertFn({ inst: reqOptsBuilder, fnName: 'build', expectedArgs: params });
+    });
+  });
+
+  describe('_cleanup', () => {
+    it('should do nothing when instance.req is undefined', () => {
+      let instance = getInstance();
+
+      instance._cleanup();
+    });
+
+    it('should call req.finalize when instance.req is defined', () => {
+      let instance = getInstance();
+      instance.req = {
+        finalize: () => {}
+      };
+
+      instance._cleanup();
+
+      nassert.assert(instance.req, null);
     });
   });
 });

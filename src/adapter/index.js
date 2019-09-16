@@ -18,13 +18,12 @@ class NSendAdapter {
       this.resolve = resolve;
       this.reject = reject;
       this._performRequest();
-    }).finally(() => {
-      if (this.req) {
-        this.req.finalize();
-        // To prevent possibly memory leaks
-        this.req.processResponse = null;
-        this.req = null;
-      }
+    }).then(res => {
+      this._cleanup();
+      return res;
+    }).catch(err => {
+      this._cleanup();
+      throw err;
     });
   }
 
@@ -63,6 +62,15 @@ class NSendAdapter {
       auth: this.opts.auth,
       headers: this.opts.headers
     });
+  }
+
+  _cleanup() {
+    if (this.req) {
+      this.req.finalize();
+      // To prevent possibly memory leaks
+      this.req.processResponse = null;
+      this.req = null;
+    }
   }
 }
 
