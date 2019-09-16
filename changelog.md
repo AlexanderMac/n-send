@@ -1,3 +1,7 @@
+# <sub>v0.1.2</sub>
+#### _Sep_. 16, 2019_
+  * Fix bug in transport determination.
+
 # <sub>v0.1.1</sub>
 #### _Sep_. 16, 2019_
   * Replace `finally` to `then.catch` calls to support node v8.
