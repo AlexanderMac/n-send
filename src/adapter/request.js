@@ -63,7 +63,7 @@ class NSendRequest {
   }
 
   _getTransport() {
-    let isHttps = this.protocol === 'https:';
+    let isHttps = this.reqOpts.protocol === 'https:';
     return isHttps ? https : http;
   }
 

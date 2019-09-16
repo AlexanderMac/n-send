@@ -1,5 +1,6 @@
 const _      = require('lodash');
 const http   = require('http');
+const https  = require('https');
 const url    = require('url');
 const fs     = require('fs');
 const path   = require('path');
@@ -11,6 +12,13 @@ let _server;
 describe('functional tests', () => {
   function _createServer(handler, test) {
     _server = http.createServer(handler).listen(8008, test);
+  }
+
+  function _createHttpsServer(handler, test) {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+    let cert = fs.readFileSync(path.resolve(__dirname, 'server.crt'));
+    let key = fs.readFileSync(path.resolve(__dirname, 'server.pem'));
+    _server = https.createServer({ cert, key }, handler).listen(8008, test);
   }
 
   function _sendSuccess(req, res, status, data) {
@@ -77,7 +85,7 @@ describe('functional tests', () => {
       };
     }
 
-    it('should use opts.url', (done) => {
+    it('should use opts.url (http)', (done) => {
       let opts = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
@@ -95,6 +103,26 @@ describe('functional tests', () => {
       };
 
       _createServer(handler(), _test(opts, status, expected, done));
+    });
+
+    it('should use opts.url (https)', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'https://localhost:8008/users/1',
+        responseType: 'json'
+      };
+      let status = 200;
+      let expected = {
+        method: 'GET',
+        url: '/users/1',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        },
+        data: 'user1'
+      };
+
+      _createHttpsServer(handler(), _test(opts, status, expected, done));
     });
 
     it('should use opts.url and opts.baseUrl', (done) => {

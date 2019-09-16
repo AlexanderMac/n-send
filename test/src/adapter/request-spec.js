@@ -97,7 +97,9 @@ describe('adapter / request', () => {
 
   describe('_getTransport', () => {
     it('should return http when protocol is `http`', () => {
-      let instance = getInstance({ protocol: 'http:' });
+      let instance = getInstance({
+        reqOpts: { protocol: 'http:' }
+      });
 
       let transport = instance._getTransport();
 
@@ -105,7 +107,9 @@ describe('adapter / request', () => {
     });
 
     it('should return https when protocol is `https`', () => {
-      let instance = getInstance({ protocol: 'https:' });
+      let instance = getInstance({
+        reqOpts: { protocol: 'https:' }
+      });
 
       let transport = instance._getTransport();
 
