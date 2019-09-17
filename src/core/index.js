@@ -7,6 +7,11 @@ class NSendCore {
     return new NSendCore();
   }
 
+  static send(opts) {
+    let instance = new NSendCore();
+    return instance.send(opts);
+  }
+
   async send(opts) {
     this._mergeOpts(opts);
     this._validateOpts();

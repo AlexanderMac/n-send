@@ -10,12 +10,33 @@ describe('core / main', () => {
   }
 
   describe('static getInstance', () => {
-    it('should create an instance of Core and return instance.send function', () => {
+    it('should create and return an instance of Core', () => {
       let opts = { data: 'opts' };
       let actual = Core.getInstance(opts);
 
-      let expected = () => {};
+      let expected = {};
       nassert.assert(actual, expected);
+    });
+  });
+
+  describe('static send', () => {
+    before(() => {
+      sinon.stub(Core.prototype, 'send');
+    });
+
+    after(() => {
+      Core.prototype.send.restore();
+    });
+
+    it('should create an instance of Core and call instance.send', async () => {
+      let opts = { data: 'opts' };
+      Core.prototype.send.resolves('res');
+
+      let actual = await Core.send(opts);
+
+      let expected = 'res';
+      nassert.assert(actual, expected);
+      nassert.assertFn({ inst: Core.prototype, fnName: 'send', expectedArgs: opts });
     });
   });
 

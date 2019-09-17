@@ -1,9 +1,10 @@
 const _ = require('lodash');
+const Core = require('./');
 
-exports.extend = (instance) => {
+exports.extend = (nsend) => {
   _.each(['get', 'head', 'options', 'delete'], (method) => {
-    instance[method] = function(url, opts) {
-      return this.send(_extendOpts(opts, {
+    nsend[method] = (url, opts) => {
+      return Core.send(_extendOpts(opts, {
         method,
         url
       }));
@@ -11,8 +12,8 @@ exports.extend = (instance) => {
   });
 
   _.each(['post', 'put', 'patch'], (method) => {
-    instance[method] = function(url, data, opts) {
-      return this.send(_extendOpts(opts, {
+    nsend[method] = (url, data, opts) => {
+      return Core.send(_extendOpts(opts, {
         method,
         url,
         data
