@@ -1,10 +1,10 @@
 const _       = require('lodash');
 const sinon   = require('sinon');
 const nassert = require('n-assert');
-const Core    = require('../../src/core');
-const adapter = require('../../src/adapter');
+const Core    = require('../../../src/core');
+const adapter = require('../../../src/adapter');
 
-describe('core', () => {
+describe('core / main', () => {
   function getInstance() {
     return new Core();
   }

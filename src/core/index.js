@@ -1,11 +1,10 @@
 const _       = require('lodash');
-const consts  = require('./consts');
-const adapter = require('./adapter');
+const consts  = require('../consts');
+const adapter = require('../adapter');
 
 class NSendCore {
   static getInstance() {
-    let instance = new NSendCore();
-    return instance.send.bind(instance);
+    return new NSendCore();
   }
 
   async send(opts) {

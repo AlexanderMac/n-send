@@ -6,7 +6,7 @@
 
 ## Features
 
-- Simple configuration
+- Simple configuration object
 - Promise API
 - Proxy support (TODO)
 - Follows redirects (TODO)
@@ -18,10 +18,9 @@
 ```js
 const nsend = require('nsend');
 
-let res1 = await nsend(opts);
+const res1 = await nsend({ url: 'http://example.com' });
 // OR
-let ns = nsend.getInstance(opts);
-let res2 = await nsend.send();
+const res2 = await nsend.get('http://example.com');
 ```
 
 ## API
@@ -79,6 +78,23 @@ let res2 = await nsend.send();
   // Note: Ignored for `responseType` of 'stream'
   responseEncoding: 'utf8', // default
 }
+```
+
+### Request method aliases
+
+There are aliases for all supported request methods.
+
+```js
+const nsend = require('nsend');
+
+nsend.request(opts?)
+nsend.get(url, opts?)
+nsend.delete(url, opts?)
+nsend.head(url, opts?)
+nsend.options(url, opts?)
+nsend.post(url, data?, opts?)
+nsend.put(url, data?, opts?)
+nsend.patch(url, data?, opts?)
 ```
 
 ## Author
