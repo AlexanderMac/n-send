@@ -1,3 +1,7 @@
+# <sub>v0.2.2</sub>
+#### _Sep_. 17, 2019_
+  * Add Type Definitions.
+
 # <sub>v0.2.1</sub>
 #### _Sep_. 17, 2019_
   * Fix bug in extending nsend by method aliases.
