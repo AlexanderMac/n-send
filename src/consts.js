@@ -7,9 +7,9 @@ const DEFAULT_OPTS = {
 };
 
 const ALLOWED_OPT_KEYS = [
+  'method',
   'baseUrl',
   'url',
-  'method',
   'params',
   'auth',
   'headers',
