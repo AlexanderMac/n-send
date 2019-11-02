@@ -77,11 +77,10 @@ class NSendResponse {
 
   _transformResponseData(data) {
     if (this.responseType === 'json') {
-      let res = _.attempt(JSON.parse.bind(null, data));
-      if (_.isError(res)) {
-        return this.reject(new NSendError('Unable to parse json response: ' + res.toString()));
+      let parsedData = _.attempt(JSON.parse.bind(null, data));
+      if (!_.isError(parsedData)) {
+        return parsedData;
       }
-      return res;
     }
     return data;
   }
