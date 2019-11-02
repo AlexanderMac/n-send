@@ -1,5 +1,5 @@
-const _          = require('lodash');
-const zlib       = require('zlib');
+const _ = require('lodash');
+const zlib = require('zlib');
 const NSendError = require('../error');
 
 class NSendResponse {

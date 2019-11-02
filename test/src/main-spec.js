@@ -1,6 +1,6 @@
-const _       = require('lodash');
+const _ = require('lodash');
 const nassert = require('n-assert');
-const nsend   = require('../../');
+const nsend = require('../../');
 
 describe('main', () => {
   it('should export public interfaces', () => {

@@ -1,7 +1,7 @@
-const _             = require('lodash');
-const sinon         = require('sinon');
-const nassert       = require('n-assert');
-const Core          = require('../../../src/core');
+const _ = require('lodash');
+const sinon = require('sinon');
+const nassert = require('n-assert');
+const Core = require('../../../src/core');
 const methodAliases = require('../../../src/core/method-aliases');
 
 describe('core / method-aliases', () => {

@@ -1,9 +1,9 @@
-const _              = require('lodash');
-const sinon          = require('sinon');
-const nassert        = require('n-assert');
-const Adapter        = require('../../../src/adapter');
-const request        = require('../../../src/adapter/request');
-const response       = require('../../../src/adapter/response');
+const _ = require('lodash');
+const sinon = require('sinon');
+const nassert = require('n-assert');
+const Adapter = require('../../../src/adapter');
+const request = require('../../../src/adapter/request');
+const response = require('../../../src/adapter/response');
 const reqOptsBuilder = require('../../../src/adapter/request-options-builder');
 
 describe('adapter / main', () => {

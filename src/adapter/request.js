@@ -1,7 +1,7 @@
-const http       = require('http');
-const https      = require('https');
+const http = require('http');
+const https = require('https');
 const NSendError = require('../error');
-const checks     = require('../utils/checks');
+const checks = require('../utils/checks');
 
 class NSendRequest {
   static performRequest(opts) {

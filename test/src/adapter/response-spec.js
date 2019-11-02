@@ -1,5 +1,5 @@
-const sinon    = require('sinon');
-const nassert  = require('n-assert');
+const sinon = require('sinon');
+const nassert = require('n-assert');
 const Response = require('../../../src/adapter/response');
 
 describe('adapter / response', () => {

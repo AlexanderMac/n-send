@@ -1,6 +1,6 @@
-const _                     = require('lodash');
-const sinon                 = require('sinon');
-const nassert               = require('n-assert');
+const _ = require('lodash');
+const sinon = require('sinon');
+const nassert = require('n-assert');
 const RequestOptionsBuilder = require('../../../src/adapter/request-options-builder');
 
 describe('adapter / request-options-builder', () => {

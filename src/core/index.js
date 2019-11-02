@@ -1,6 +1,6 @@
-const _          = require('lodash');
-const consts     = require('../consts');
-const adapter    = require('../adapter');
+const _ = require('lodash');
+const consts = require('../consts');
+const adapter = require('../adapter');
 const NSendError = require('../error');
 
 class NSendCore {

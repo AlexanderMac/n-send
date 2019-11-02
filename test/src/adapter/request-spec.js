@@ -1,11 +1,11 @@
-const _          = require('lodash');
-const http       = require('http');
-const https      = require('https');
-const stream     = require('stream');
-const sinon      = require('sinon');
-const should     = require('should');
-const nassert    = require('n-assert');
-const Request    = require('../../../src/adapter/request');
+const _ = require('lodash');
+const http = require('http');
+const https = require('https');
+const stream = require('stream');
+const sinon = require('sinon');
+const should = require('should');
+const nassert = require('n-assert');
+const Request = require('../../../src/adapter/request');
 const NSendError = require('../../../src/error');
 
 describe('adapter / request', () => {

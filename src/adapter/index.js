@@ -1,6 +1,6 @@
-const _              = require('lodash');
-const request        = require('./request');
-const response       = require('./response');
+const _ = require('lodash');
+const request = require('./request');
+const response = require('./response');
 const reqOptsBuilder = require('./request-options-builder');
 
 class NSendAdapter {
