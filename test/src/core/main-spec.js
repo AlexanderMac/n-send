@@ -1,7 +1,7 @@
-const _       = require('lodash');
-const sinon   = require('sinon');
+const _ = require('lodash');
+const sinon = require('sinon');
 const nassert = require('n-assert');
-const Core    = require('../../../src/core');
+const Core = require('../../../src/core');
 const adapter = require('../../../src/adapter');
 
 describe('core / main', () => {
