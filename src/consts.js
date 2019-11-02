@@ -21,7 +21,10 @@ const ALLOWED_OPT_KEYS = [
   'responseEncoding'
 ];
 
+const SAFE_METHODS = ['get', 'head', 'options', 'trace'];
+
 module.exports = {
   DEFAULT_OPTS,
-  ALLOWED_OPT_KEYS
+  ALLOWED_OPT_KEYS,
+  SAFE_METHODS
 };

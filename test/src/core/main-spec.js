@@ -56,7 +56,9 @@ describe('core / main', () => {
       sinon.stub(instance, '_mergeOpts');
       sinon.stub(instance, '_validateOpts');
 
-      let res = 'res';
+      let res = {
+        headers: {}
+      };
       adapter.performRequest.resolves(res);
 
       let actual = await instance.send(opts);

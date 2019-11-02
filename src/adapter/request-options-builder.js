@@ -47,7 +47,7 @@ class NSendRequestOptionsBuilder {
     }
   }
 
-  // TODO: accoring node.js docs auth <string> used to compute an Authorization header
+  // TODO: accoring to node.js docs auth <string> used to compute an Authorization header
   _parseAuth() {
     if (this.inputAuth) {
       let username = _.toString(this.inputAuth.username);

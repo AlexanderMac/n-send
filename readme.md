@@ -9,7 +9,7 @@
 - Simple configuration object
 - Promise API
 - Proxy support (TODO)
-- Follows redirects (TODO)
+- Follows redirects
 - Request cancelation (TODO)
 - Retries on failure (TODO)
 - Timeout handling

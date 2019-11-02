@@ -428,10 +428,97 @@ describe('functional tests', () => {
   });
 
   describe('maxRedirects', () => {
-    it.skip('should use opts.maxRedirects and don not abort req (not exceeded)', () => {
+    function handler() {
+      return (req, res) => {
+        let parsedUrl = url.parse(req.url);
+        switch (parsedUrl.pathname) {
+          case '/users':
+            res.setHeader('location', 'http://localhost:8008/v2/users');
+            return _sendSuccess(req, res, 301);
+          case '/v2/users':
+            res.setHeader('location', 'http://localhost:8008/v3/users');
+            return _sendSuccess(req, res, 301);
+          case '/v3/users':
+            return _sendSuccess(req, res, 200, { users: 'users' });
+          default:
+            return _sendNotFound(res);
+        }
+      };
+    }
+
+    it('should just return response when opts.maxRedirects == 0 and res.status in [300,399]', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/users',
+        responseType: 'json',
+        maxRedirects: 0
+      };
+      let status = 301;
+      let expected = {
+        method: 'GET',
+        url: '/users',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        }
+      };
+
+      _createServer(handler(), _test(opts, status, expected, done));
     });
 
-    it.skip('should use opts.maxRedirects and abort req (exceeded)', () => {
+    it('should just return response when opts.maxRedirects > 0 and res.status not in [300,399]', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/v3/users',
+        responseType: 'json',
+        maxRedirects: 2
+      };
+      let status = 200;
+      let expected = {
+        method: 'GET',
+        url: '/v3/users',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        },
+        data: { users: 'users' }
+      };
+
+      _createServer(handler(), _test(opts, status, expected, done));
+    });
+
+    it('should follow redirects when opts.maxRedirects > 0 and res.status in [300,399]', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/users',
+        responseType: 'json',
+        maxRedirects: 2
+      };
+      let status = 200;
+      let expected = {
+        method: 'GET',
+        url: '/v3/users',
+        headers: {
+          host: 'localhost:8008',
+          connection: 'close'
+        },
+        data: { users: 'users' }
+      };
+
+      _createServer(handler(), _test(opts, status, expected, done));
+    });
+
+    it('should throw error when redirectCount exceeds opts.maxRedirects', (done) => {
+      let opts = {
+        method: 'GET',
+        url: 'http://localhost:8008/users',
+        responseType: 'json',
+        maxRedirects: 1
+      };
+      let status = 200;
+      let expected = new nsend.NSendError('Max redirects exceeded');
+
+      _createServer(handler(), _test(opts, status, expected, done));
     });
   });
 
