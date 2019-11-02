@@ -1,3 +1,8 @@
+# <sub>v0.3.0</sub>
+#### _Nov_. 2, 2019_
+  * Add support for redirects following.
+  * Don't throw error when `responseType` is `json` and `response.data` can't be parsed.
+
 # <sub>v0.2.2</sub>
 #### _Sep_. 17, 2019_
   * Add Type Definitions.
