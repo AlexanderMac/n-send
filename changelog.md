@@ -1,3 +1,8 @@
+# <sub>v0.3.2</sub>
+#### _Nov_. 2, 2019_
+  * Remember response redirects history.
+  * Remove `content-*` headers on redirect.
+
 # <sub>v0.3.1</sub>
 #### _Nov_. 2, 2019_
   * Rename response `status` to `statusCode`.
