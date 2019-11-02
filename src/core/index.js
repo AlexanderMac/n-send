@@ -18,8 +18,10 @@ class NSendCore {
     this._validateOpts();
 
     let res = await adapter.performRequest(this._getRequestParams());
+    res = await this._followRedirects(res);
+    res.redirects = this.redirects;
 
-    return this._followRedirects(res);
+    return res;
   }
 
   // eslint-disable-next-line max-statements
@@ -50,6 +52,7 @@ class NSendCore {
     this.redirectCount = 0;
     this.responseType = merged.responseType;
     this.responseEncoding = merged.responseEncoding;
+    this.redirects = [];
   }
 
   _validateOpts() {
@@ -81,22 +84,25 @@ class NSendCore {
     if (!location || res.statusCode < 300 || res.statusCode >= 400) {
       return res;
     }
-    /* TODO: track redirects
-    this.redirects.push({
-      url: this.url,
-      headers: res.headers,
-      statusCode: res.statusCode
-    });
-    */
 
     this.redirectCount++;
     if (this.redirectCount > this.maxRedirects) {
       throw new NSendError('Max redirects exceeded');
     }
 
+    this.redirects.push({
+      url: this.url,
+      statusCode: res.statusCode,
+      headers: res.headers
+    });
     if (res.statusCode !== 307 && !_.includes(consts.SAFE_METHODS, this.method)) {
       this.method = 'GET';
-      _.remove(this.headers, h => /^content-/i.test(h));
+      this.headers = _.reduce(this.headers, (result, value, name) => {
+        if (!/^content-/i.test(name)) {
+          result[name] = value;
+        }
+        return result;
+      }, {});
     }
     this.url = location;
     this.baseUrl = undefined;

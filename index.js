@@ -1,4 +1,4 @@
-const Core          = require('./src/core');
+const Core = require('./src/core');
 const methodAliases = require('./src/core/method-aliases');
 
 const nsend = (opts) => {

@@ -468,18 +468,22 @@ describe('functional tests', () => {
 
     it('should just return response when opts.maxRedirects > 0 and res.statusCode not in [300,399]', (done) => {
       let opts = {
-        method: 'GET',
+        method: 'POST',
         url: 'http://localhost:8008/v3/users',
         responseType: 'json',
-        maxRedirects: 2
+        maxRedirects: 2,
+        data: {
+          user: { id: 1 }
+        }
       };
       let statusCode = 200;
       let expected = {
-        method: 'GET',
+        method: 'POST',
         url: '/v3/users',
         headers: {
           host: 'localhost:8008',
-          connection: 'close'
+          connection: 'close',
+          'content-length': '17'
         },
         data: { users: 'users' }
       };
@@ -489,10 +493,17 @@ describe('functional tests', () => {
 
     it('should follow redirects when opts.maxRedirects > 0 and res.statusCode in [300,399]', (done) => {
       let opts = {
-        method: 'GET',
+        method: 'POST',
         url: 'http://localhost:8008/users',
         responseType: 'json',
-        maxRedirects: 2
+        maxRedirects: 2,
+        headers: {
+          'x-client-time': '123331221321',
+          'content-type': 'application/json'
+        },
+        data: {
+          user: { id: 1 }
+        }
       };
       let statusCode = 200;
       let expected = {
@@ -500,6 +511,7 @@ describe('functional tests', () => {
         url: '/v3/users',
         headers: {
           host: 'localhost:8008',
+          'x-client-time': '123331221321',
           connection: 'close'
         },
         data: { users: 'users' }
@@ -510,7 +522,7 @@ describe('functional tests', () => {
 
     it('should throw error when redirectCount exceeds opts.maxRedirects', (done) => {
       let opts = {
-        method: 'GET',
+        method: 'POST',
         url: 'http://localhost:8008/users',
         responseType: 'json',
         maxRedirects: 1
