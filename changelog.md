@@ -1,3 +1,7 @@
+# <sub>v0.3.1</sub>
+#### _Nov_. 2, 2019_
+  * Rename response `status` to `statusCode`.
+
 # <sub>v0.3.0</sub>
 #### _Nov_. 2, 2019_
   * Add support for redirects following.
