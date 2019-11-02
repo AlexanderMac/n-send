@@ -39,7 +39,7 @@ class NSendResponse {
     }
 
     this.response = {
-      status: this.res.statusCode,
+      statusCode: this.res.statusCode,
       statusText: this.res.statusMessage,
       headers: this.res.headers,
       request: this.req

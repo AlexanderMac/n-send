@@ -31,7 +31,7 @@ interface NSendRequestOptions {
 }
 
 interface NSendResponse {
-  status: number;
+  statusCode: number;
   statusText: string;
   headers: any;
   request?: any;
