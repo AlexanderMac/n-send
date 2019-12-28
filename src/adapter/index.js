@@ -32,7 +32,7 @@ class NSendAdapter {
   }
 
   _performRequest() {
-    let opts = this._getOpts(['protocol', 'timeout']);
+    let opts = this._createOpts(['protocol', 'timeout']);
     opts.reqOpts = this._getReqOpts();
     opts.data = this.opts.data;
     opts.resolve = this.resolve;
@@ -42,7 +42,7 @@ class NSendAdapter {
   }
 
   _processResponse(res) {
-    let opts = this._getOpts(['maxContentLength', 'responseType', 'responseEncoding']);
+    let opts = this._createOpts(['maxContentLength', 'responseType', 'responseEncoding']);
     opts.req = this.req;
     opts.res = res;
     opts.resolve = this.resolve;
@@ -50,7 +50,7 @@ class NSendAdapter {
     response.processResponse(opts);
   }
 
-  _getOpts(pickOpts) {
+  _createOpts(pickOpts) {
     return _.chain(this.opts)
       .pick(pickOpts)
       .clone()

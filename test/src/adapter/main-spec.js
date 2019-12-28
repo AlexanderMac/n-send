@@ -81,7 +81,7 @@ describe('adapter / main', () => {
       };
       instance.resolve = () => {};
       instance.reject = () => {};
-      sinon.stub(instance, '_getOpts').callsFake(() => ({ protocol: 'http' }));
+      sinon.stub(instance, '_createOpts').callsFake(() => ({ protocol: 'http' }));
       sinon.stub(instance, '_getReqOpts').callsFake(() => 'reqOpts');
       request.performRequest.returns('req');
 
@@ -97,7 +97,7 @@ describe('adapter / main', () => {
       instance._performRequest();
 
       nassert.assert(instance.req, 'req');
-      nassert.assertFn({ inst: instance, fnName: '_getOpts', expectedArgs: ['protocol', 'timeout'] });
+      nassert.assertFn({ inst: instance, fnName: '_createOpts', expectedArgs: ['protocol', 'timeout'] });
       nassert.assertFn({ inst: instance, fnName: '_getReqOpts', expectedArgs: '_without-args_' });
       nassert.assertFn({ inst: request, fnName: 'performRequest', expectedArgs: opts });
     });
@@ -118,7 +118,7 @@ describe('adapter / main', () => {
       instance.req = 'req';
       instance.resolve = () => {};
       instance.reject = () => {};
-      sinon.stub(instance, '_getOpts').callsFake(() => ({ responseType: 'text', responseEncoding: 'utf8' }));
+      sinon.stub(instance, '_createOpts').callsFake(() => ({ responseType: 'text', responseEncoding: 'utf8' }));
 
       let res = 'res';
       let opts = {
@@ -132,12 +132,12 @@ describe('adapter / main', () => {
 
       instance._processResponse(res);
 
-      nassert.assertFn({ inst: instance, fnName: '_getOpts', expectedArgs: ['maxContentLength', 'responseType', 'responseEncoding'] });
+      nassert.assertFn({ inst: instance, fnName: '_createOpts', expectedArgs: ['maxContentLength', 'responseType', 'responseEncoding'] });
       nassert.assertFn({ inst: response, fnName: 'processResponse', expectedArgs: opts });
     });
   });
 
-  describe('_getOpts', () => {
+  describe('_createOpts', () => {
     it('should clone and return requested options', () => {
       let instance = getInstance();
       instance.opts = {
@@ -153,7 +153,7 @@ describe('adapter / main', () => {
       };
 
       let pickOpts = ['maxContentLength', 'responseType', 'responseEncoding'];
-      let actual = instance._getOpts(pickOpts);
+      let actual = instance._createOpts(pickOpts);
 
       let expected = {
         maxContentLength: 25000,
