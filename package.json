@@ -6,10 +6,11 @@
   "types": "index.d.ts",
   "files": [
     "index.js",
+    "index.d.ts",
     "src"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=8.4"
   },
   "scripts": {
     "lint": "eslint --ext .js src/ test/",
@@ -38,11 +39,11 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "eslint": "^6.3.0",
-    "mocha": "^6.2.0",
+    "eslint": "^6.8.0",
+    "mocha": "^6.2.2",
     "n-assert": "^5.0.2",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "should": "^13.2.3",
-    "sinon": "^7.4.2"
+    "sinon": "^8.0.1"
   }
 }
