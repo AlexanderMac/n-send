@@ -5,10 +5,10 @@ const stream = require('stream');
 const sinon = require('sinon');
 const should = require('should');
 const nassert = require('n-assert');
-const Request = require('../../../src/adapter/request');
-const NSendError = require('../../../src/error');
+const Request = require('../../../../src/adapter/http1/request');
+const NSendError = require('../../../../src/error');
 
-describe('adapter / request', () => {
+describe('adapter / http1 / request', () => {
   function getInstance(opts = {}) {
     return new Request(opts);
   }

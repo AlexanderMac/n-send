@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const zlib = require('zlib');
-const NSendError = require('../error');
+const NSendError = require('../../error');
 
 class NSendResponse {
   static processResponse(opts) {

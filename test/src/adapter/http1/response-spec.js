@@ -1,8 +1,8 @@
 const sinon = require('sinon');
 const nassert = require('n-assert');
-const Response = require('../../../src/adapter/response');
+const Response = require('../../../../src/adapter/http1/response');
 
-describe('adapter / response', () => {
+describe('adapter / http1 / response', () => {
   function getInstance(opts = {}) {
     return new Response(opts);
   }
