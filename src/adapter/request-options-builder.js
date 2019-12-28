@@ -25,7 +25,7 @@ class NSendRequestOptionsBuilder {
   }
 
   _parseUrl() {
-    // TODO: add protocol if missing to inputUrl or inputBaseUrl
+    // TODO: add protocol to inputUrl or inputBaseUrl if it missing
     let parsedUrl = new URL(this.inputUrl, this.inputBaseUrl);
 
     this.protocol = parsedUrl.protocol;

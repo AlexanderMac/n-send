@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const consts = require('../consts');
 const request = require('./request');
 const response = require('./response');
 const reqOptsBuilder = require('./request-options-builder');
@@ -25,6 +26,9 @@ class NSendAdapter {
       this._cleanup();
       throw err;
     });
+    /* TODO: use it when Node version will be >=10
+    .finally(() => this._cleanup());
+    */
   }
 
   _performRequest() {
@@ -54,14 +58,8 @@ class NSendAdapter {
   }
 
   _getReqOpts() {
-    return reqOptsBuilder.build({
-      method: this.opts.method,
-      baseUrl: this.opts.baseUrl,
-      url: this.opts.url,
-      params: this.opts.params,
-      auth: this.opts.auth,
-      headers: this.opts.headers
-    });
+    let reqOpts = _.pick(this.opts, consts.REQUEST_KEYS);
+    return reqOptsBuilder.build(reqOpts);
   }
 
   _cleanup() {

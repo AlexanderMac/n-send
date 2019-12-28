@@ -36,6 +36,7 @@ class NSendCore {
       custom
     );
 
+    this.httpVer = merged.httpVer;
     this.baseUrl = merged.baseUrl;
     this.url = merged.url;
     this.method = _.toLower(merged.method);
@@ -60,19 +61,7 @@ class NSendCore {
   }
 
   _getRequestParams() {
-    return {
-      method: this.method,
-      baseUrl: this.baseUrl,
-      url: this.url,
-      params: this.params,
-      auth: this.auth,
-      headers: this.headers,
-      timeout: this.timeout,
-      maxContentLength: this.maxContentLength,
-      responseType: this.responseType,
-      responseEncoding: this.responseEncoding,
-      data: this.data
-    };
+    return _.pick(this, consts.ADAPTER_KEYS);
   }
 
   // eslint-disable-next-line max-statements

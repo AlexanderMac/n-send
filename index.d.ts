@@ -1,3 +1,7 @@
+type HttpVer = 
+  | 'http/1'
+  | 'http/2';
+
 type Method =
   | 'get' | 'GET'
   | 'delete' | 'DELETE'
@@ -5,16 +9,17 @@ type Method =
   | 'options' | 'OPTIONS'
   | 'post' | 'POST'
   | 'put' | 'PUT'
-  | 'patch' | 'PATCH'
+  | 'patch' | 'PATCH';
 
 type ResponseType = 
   | 'json'
   | 'text'
-  | 'stream'
+  | 'stream';
 
 interface NSendRequestOptions {
+  httpVer?: HttpVer,
   method?: Method;
-  baseURL?: string;
+  baseUrl?: string;
   url?: string;
   params?: any;
   auth?: {
