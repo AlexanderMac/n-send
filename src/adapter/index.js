@@ -19,16 +19,7 @@ class NSendAdapter {
       this.resolve = resolve;
       this.reject = reject;
       this._performRequest();
-    }).then(res => {
-      this._cleanup();
-      return res;
-    }).catch(err => {
-      this._cleanup();
-      throw err;
-    });
-    /* TODO: use it when Node version will be >=10
-    .finally(() => this._cleanup());
-    */
+    }).finally(() => this._cleanup());
   }
 
   _performRequest() {

@@ -10,7 +10,7 @@
     "src"
   ],
   "engines": {
-    "node": ">=8.4"
+    "node": ">=10"
   },
   "scripts": {
     "lint": "eslint --ext .js src/ test/",
