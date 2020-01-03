@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { URL, URLSearchParams } = require('url');
+const utils = require('../utils');
 
 class NSendRequestOptionsBuilder {
   static build(opts) {
@@ -13,7 +14,7 @@ class NSendRequestOptionsBuilder {
     this.inputUrl = url;
     this.inputParams = params;
     this.inputAuth = auth;
-    this.inputHeaders = _.clone(headers);
+    this.inputHeaders = headers;
   }
 
   build() {
@@ -25,18 +26,14 @@ class NSendRequestOptionsBuilder {
   }
 
   _parseUrl() {
-    // TODO: add protocol to inputUrl or inputBaseUrl if it missing
-    let parsedUrl = new URL(this.inputUrl, this.inputBaseUrl);
+    let authority = utils.parseUrl(this.inputUrl, this.inputBaseUrl);
 
-    this.protocol = parsedUrl.protocol;
-    this.host = parsedUrl.hostname;
-    this.port = parsedUrl.port;
-    this.username = parsedUrl.username;
-    this.password = parsedUrl.password;
-    this.path = parsedUrl.pathname;
-    if (parsedUrl.search) {
-      this.path += parsedUrl.search;
-    }
+    this.protocol = authority.protocol;
+    this.host = authority.hostname;
+    this.port = authority.port;
+    this.username = authority.username;
+    this.password = authority.password;
+    this.path = authority.pathname + (authority.search ? authority.search : '');
   }
 
   _parseParams() {
