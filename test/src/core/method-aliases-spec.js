@@ -26,11 +26,11 @@ describe('core / method-aliases', () => {
 
         let url = 'example.com';
         let data = 'some data';
-        let opts = { headers: 'some headers' };
+        let options = { headers: 'some headers' };
         if (_.includes(['get', 'head', 'options', 'delete'], method)) {
-          nsend[method](url, opts);
+          nsend[method](url, options);
         } else {
-          nsend[method](url, data, opts);
+          nsend[method](url, data, options);
         }
 
         let expectedArgs = {

@@ -14,7 +14,7 @@ describe('functional tests', () => {
     _server = http.createServer(handler).listen(8008, test);
   }
 
-  function _createHttpsServer(handler, test) {
+  function _createSecureServer(handler, test) {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
     let cert = fs.readFileSync(path.resolve(__dirname, 'server.crt'));
     let key = fs.readFileSync(path.resolve(__dirname, 'server.pem'));
@@ -45,12 +45,12 @@ describe('functional tests', () => {
     req.on('end', () => cb(body));
   }
 
-  function _test(opts, statusCode, expected, done) {
+  function _test(options, statusCode, expected, done) {
     return () => {
       Promise
         .resolve()
         .then(async () => {
-          let res = await nsend(opts);
+          let res = await nsend(options);
           should(res.statusCode).equal(statusCode);
           should(res.data).eql(expected);
           done();
@@ -85,8 +85,8 @@ describe('functional tests', () => {
       };
     }
 
-    it('should use opts.url (http)', (done) => {
-      let opts = {
+    it('should use options.url (http)', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         responseType: 'json'
@@ -102,11 +102,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.url (https)', (done) => {
-      let opts = {
+    it('should use options.url (https)', (done) => {
+      let options = {
         method: 'GET',
         url: 'https://localhost:8008/users/1',
         responseType: 'json'
@@ -122,11 +122,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createHttpsServer(handler(), _test(opts, statusCode, expected, done));
+      _createSecureServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.url and opts.baseUrl', (done) => {
-      let opts = {
+    it('should use options.url and options.baseUrl', (done) => {
+      let options = {
         method: 'GET',
         url: '/users/1',
         baseUrl: 'http://localhost:8008',
@@ -143,11 +143,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.params', (done) => {
-      let opts = {
+    it('should use options.params', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         params: {
@@ -166,11 +166,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.params and opts.url.query', (done) => {
-      let opts = {
+    it('should use options.params and options.url.query', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1?token=sometoken',
         params: {
@@ -189,11 +189,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.auth', (done) => {
-      let opts = {
+    it('should use options.auth', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         auth: {
@@ -214,11 +214,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.headers', (done) => {
-      let opts = {
+    it('should use options.headers', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         headers: {
@@ -241,7 +241,7 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
   });
 
@@ -257,8 +257,8 @@ describe('functional tests', () => {
       };
     }
 
-    it('should use opts.timeout and don not abort req (not exceeded)', (done) => {
-      let opts = {
+    it('should use options.timeout and don not abort req (not exceeded)', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         timeout: 50,
@@ -275,11 +275,11 @@ describe('functional tests', () => {
         data: 'user1'
       };
 
-      _createServer(handler(20), _test(opts, statusCode, expected, done));
+      _createServer(handler(20), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.timeout and abort req (exceeded)', (done) => {
-      let opts = {
+    it('should use options.timeout and abort req (exceeded)', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         timeout: 50,
@@ -288,7 +288,7 @@ describe('functional tests', () => {
       let statusCode = 200;
       let expected = new nsend.NSendError('Timeout of 50ms exceeded');
 
-      _createServer(handler(100), _test(opts, statusCode, expected, done));
+      _createServer(handler(100), _test(options, statusCode, expected, done));
     });
   });
 
@@ -305,7 +305,7 @@ describe('functional tests', () => {
     }
 
     it('should send the JSON data', (done) => {
-      let opts = {
+      let options = {
         method: 'POST',
         url: 'http://localhost:8008/users',
         headers: {
@@ -327,11 +327,11 @@ describe('functional tests', () => {
         data: '{"name":"user2"}'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
     it('should send the Buffer data', (done) => {
-      let opts = {
+      let options = {
         method: 'PUT',
         url: 'http://localhost:8008/users',
         headers: {
@@ -353,12 +353,12 @@ describe('functional tests', () => {
         data: '{"name":"user22"}'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
     it.skip('should send the Stream data', (done) => {
       // TODO: doesn't work
-      let opts = {
+      let options = {
         method: 'PATCH',
         url: 'http://localhost:8008/users',
         data: fs.createReadStream(path.resolve(__dirname, 'data.txt')),
@@ -375,7 +375,7 @@ describe('functional tests', () => {
         data: '{"name":"user23"}'
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
   });
 
@@ -392,8 +392,8 @@ describe('functional tests', () => {
       };
     }
 
-    it('should use opts.maxContentLength and don not abort req (not exceeded)', (done) => {
-      let opts = {
+    it('should use options.maxContentLength and don not abort req (not exceeded)', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users',
         maxContentLength: 120,
@@ -410,11 +410,11 @@ describe('functional tests', () => {
         data: '0123456789'
       };
 
-      _createServer(handler(10), _test(opts, statusCode, expected, done));
+      _createServer(handler(10), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.maxContentLength and abort req (exceeded)', (done) => {
-      let opts = {
+    it('should use options.maxContentLength and abort req (exceeded)', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users',
         maxContentLength: 120,
@@ -423,7 +423,7 @@ describe('functional tests', () => {
       let statusCode = 201;
       let expected = new nsend.NSendError('MaxContentLength size of 120 exceeded');
 
-      _createServer(handler(30), _test(opts, statusCode, expected, done));
+      _createServer(handler(30), _test(options, statusCode, expected, done));
     });
   });
 
@@ -446,8 +446,8 @@ describe('functional tests', () => {
       };
     }
 
-    it('should just return response when opts.maxRedirects == 0 and res.statusCode in [300,399]', (done) => {
-      let opts = {
+    it('should just return response when options.maxRedirects == 0 and res.statusCode in [300,399]', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users',
         responseType: 'json',
@@ -463,11 +463,11 @@ describe('functional tests', () => {
         }
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should just return response when opts.maxRedirects > 0 and res.statusCode not in [300,399]', (done) => {
-      let opts = {
+    it('should just return response when options.maxRedirects > 0 and res.statusCode not in [300,399]', (done) => {
+      let options = {
         method: 'POST',
         url: 'http://localhost:8008/v3/users',
         responseType: 'json',
@@ -488,11 +488,11 @@ describe('functional tests', () => {
         data: { users: 'users' }
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should follow redirects when opts.maxRedirects > 0 and res.statusCode in [300,399]', (done) => {
-      let opts = {
+    it('should follow redirects when options.maxRedirects > 0 and res.statusCode in [300,399]', (done) => {
+      let options = {
         method: 'POST',
         url: 'http://localhost:8008/users',
         responseType: 'json',
@@ -517,11 +517,11 @@ describe('functional tests', () => {
         data: { users: 'users' }
       };
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should throw error when redirectCount exceeds opts.maxRedirects', (done) => {
-      let opts = {
+    it('should throw error when redirectCount exceeds options.maxRedirects', (done) => {
+      let options = {
         method: 'POST',
         url: 'http://localhost:8008/users',
         responseType: 'json',
@@ -530,7 +530,7 @@ describe('functional tests', () => {
       let statusCode = 200;
       let expected = new nsend.NSendError('Max redirects exceeded');
 
-      _createServer(handler(), _test(opts, statusCode, expected, done));
+      _createServer(handler(), _test(options, statusCode, expected, done));
     });
   });
 
@@ -546,8 +546,8 @@ describe('functional tests', () => {
       };
     }
 
-    it('should use opts.responseType=json', (done) => {
-      let opts = {
+    it('should use options.responseType=json', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         responseType: 'json'
@@ -563,11 +563,11 @@ describe('functional tests', () => {
         data: { user: 'user1' }
       };
 
-      _createServer(handler(30), _test(opts, statusCode, expected, done));
+      _createServer(handler(30), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.responseType=text', (done) => {
-      let opts = {
+    it('should use options.responseType=text', (done) => {
+      let options = {
         method: 'GET',
         url: 'http://localhost:8008/users/1',
         responseType: 'text'
@@ -583,12 +583,12 @@ describe('functional tests', () => {
         data: { user: 'user1' }
       });
 
-      _createServer(handler(30), _test(opts, statusCode, expected, done));
+      _createServer(handler(30), _test(options, statusCode, expected, done));
     });
 
-    it('should use opts.responseType=stream', (done) => {
+    it('should use options.responseType=stream', (done) => {
       async function test() {
-        let opts = {
+        let options = {
           method: 'GET',
           url: 'http://localhost:8008/users/1',
           responseType: 'stream'
@@ -604,7 +604,7 @@ describe('functional tests', () => {
           data: { user: 'user1' }
         });
 
-        let res = await nsend(opts);
+        let res = await nsend(options);
 
         let resDataBuffer = [];
         res.data.on('data', chunk => resDataBuffer.push(chunk));
@@ -625,10 +625,10 @@ describe('functional tests', () => {
   });
 
   describe('responseEncoding', () => {
-    it.skip('should use opts.responseEncoding=utf8', () => {
+    it.skip('should use options.responseEncoding=utf8', () => {
     });
 
-    it.skip('should use opts.responseEncoding=utf16', () => {
+    it.skip('should use options.responseEncoding=utf16', () => {
     });
   });
 });

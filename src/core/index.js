@@ -8,16 +8,16 @@ class NSendCore {
     return new NSendCore();
   }
 
-  static send(opts) {
+  static send(options) {
     let instance = new NSendCore();
-    return instance.send(opts);
+    return instance.send(options);
   }
 
-  async send(opts) {
-    this._mergeOpts(opts);
-    this._validateOpts();
+  async send(options) {
+    this._mergeOptions(options);
+    this._validateOptions();
 
-    let res = await adapter.performRequest(this._getRequestParams());
+    let res = await adapter.performRequest(this._getRequestOptions());
     res = await this._followRedirects(res);
     res.redirects = this.redirects;
 
@@ -25,10 +25,10 @@ class NSendCore {
   }
 
   // eslint-disable-next-line max-statements
-  _mergeOpts(opts) {
-    let defaults = _.cloneDeep(consts.DEFAULT_OPTS);
-    let custom = _.chain(opts)
-      .pick(consts.ALLOWED_OPT_KEYS)
+  _mergeOptions(options) {
+    let defaults = _.cloneDeep(consts.DEFAULT_OPTIONS);
+    let custom = _.chain(options)
+      .pick(consts.ALLOWED_OPTION_KEYS)
       .cloneDeep()
       .value();
     let merged = _.extend(
@@ -56,12 +56,12 @@ class NSendCore {
     this.redirects = [];
   }
 
-  _validateOpts() {
+  _validateOptions() {
     // TODO: implement it
   }
 
-  _getRequestParams() {
-    return _.pick(this, consts.ADAPTER_KEYS);
+  _getRequestOptions() {
+    return _.pick(this, consts.ADAPTER_OPTION_KEYS);
   }
 
   // eslint-disable-next-line max-statements
@@ -97,7 +97,7 @@ class NSendCore {
     this.baseUrl = undefined;
     this.data = undefined;
 
-    res = await adapter.performRequest(this._getRequestParams());
+    res = await adapter.performRequest(this._getRequestOptions());
     return this._followRedirects(res);
   }
 }

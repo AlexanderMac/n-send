@@ -3,8 +3,8 @@ const zlib = require('zlib');
 const NSendError = require('../../error');
 
 class NSendResponse {
-  static processResponse(opts) {
-    let instance = new NSendResponse(opts);
+  static processResponse(options) {
+    let instance = new NSendResponse(options);
     return instance.processResponse();
   }
 
@@ -53,19 +53,20 @@ class NSendResponse {
 
   _processResponseStream() {
     let resDataBuffer = [];
-    this.resStream.on('data', chunk => {
-      resDataBuffer.push(chunk);
-      if (this.maxContentLength > -1 && Buffer.concat(resDataBuffer).length > this.maxContentLength) {
-        this.resStream.destroy();
-        this.reject(new NSendError('MaxContentLength size of ' + this.maxContentLength + ' exceeded'));
-      }
-    });
 
     this.resStream.on('error', err => {
       if (this.req.aborted) {
         return;
       }
       this.reject(new NSendError(err));
+    });
+
+    this.resStream.on('data', chunk => {
+      resDataBuffer.push(chunk);
+      if (this.maxContentLength > -1 && Buffer.concat(resDataBuffer).length > this.maxContentLength) {
+        this.resStream.destroy();
+        this.reject(new NSendError('MaxContentLength size of ' + this.maxContentLength + ' exceeded'));
+      }
     });
 
     this.resStream.on('end', () => {

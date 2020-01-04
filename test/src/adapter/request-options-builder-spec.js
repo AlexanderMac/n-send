@@ -4,8 +4,8 @@ const nassert = require('n-assert');
 const RequestOptionsBuilder = require('../../../src/adapter/request-options-builder');
 
 describe('adapter / request-options-builder', () => {
-  function getInstance(opts = {}) {
-    return new RequestOptionsBuilder(opts);
+  function getInstance(options = {}) {
+    return new RequestOptionsBuilder(options);
   }
 
   describe('static build', () => {
@@ -18,31 +18,31 @@ describe('adapter / request-options-builder', () => {
     });
 
     it('should create an instance of RequestOptionsBuilder and call build function', () => {
-      let builtOpts = 'opts';
-      RequestOptionsBuilder.prototype.build.returns(builtOpts);
+      let builtOptions = 'options';
+      RequestOptionsBuilder.prototype.build.returns(builtOptions);
 
-      let opts = { data: 'opts' };
-      let actual = RequestOptionsBuilder.build(opts);
+      let options = { data: 'options' };
+      let actual = RequestOptionsBuilder.build(options);
 
-      let expected = builtOpts;
+      let expected = builtOptions;
       nassert.assert(actual, expected);
       nassert.assertFn({ inst: RequestOptionsBuilder.prototype, fnName: 'build', expectedArgs: '_without-args_' });
     });
   });
 
   describe('build', () => {
-    it('should call internal functions and return built opts', () => {
-      let builtOpts = 'opts';
+    it('should call internal functions and return built options', () => {
+      let builtOptions = 'options';
       let instance = getInstance();
       sinon.stub(instance, '_parseUrl');
       sinon.stub(instance, '_parseParams');
       sinon.stub(instance, '_parseAuth');
       sinon.stub(instance, '_parseProxy');
-      sinon.stub(instance, '_buildOptions').returns(builtOpts);
+      sinon.stub(instance, '_buildOptions').returns(builtOptions);
 
       let actual = instance.build();
 
-      let expected = builtOpts;
+      let expected = builtOptions;
       nassert.assert(actual, expected);
       nassert.assertFn({ inst: instance, fnName: '_parseUrl', expectedArgs: '_without-args_' });
       nassert.assertFn({ inst: instance, fnName: '_parseParams', expectedArgs: '_without-args_' });

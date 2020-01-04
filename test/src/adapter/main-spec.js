@@ -4,7 +4,7 @@ const nassert = require('n-assert');
 const Adapter = require('../../../src/adapter');
 const request = require('../../../src/adapter/http1/request');
 const response = require('../../../src/adapter/http1/response');
-const reqOptsBuilder = require('../../../src/adapter/request-options-builder');
+const reqOptionsBuilder = require('../../../src/adapter/request-options-builder');
 
 describe('adapter / main', () => {
   function getInstance() {
@@ -24,8 +24,8 @@ describe('adapter / main', () => {
       let res = 'res';
       Adapter.prototype.performRequest.returns(res);
 
-      let opts = { data: 'opts' };
-      let actual = Adapter.performRequest(opts);
+      let options = { data: 'options' };
+      let actual = Adapter.performRequest(options);
 
       let expected = res;
       nassert.assert(actual, expected);
@@ -76,17 +76,17 @@ describe('adapter / main', () => {
 
     it('should build req options and call request.performRequest', () => {
       let instance = getInstance();
-      instance.opts = {
+      instance.options = {
         data: 'somedata'
       };
       instance.resolve = () => {};
       instance.reject = () => {};
-      sinon.stub(instance, '_createOpts').callsFake(() => ({ protocol: 'http' }));
-      sinon.stub(instance, '_getReqOpts').callsFake(() => 'reqOpts');
+      sinon.stub(instance, '_createOptions').callsFake(() => ({ protocol: 'http' }));
+      sinon.stub(instance, '_getReqOptions').callsFake(() => 'reqOptions');
       request.performRequest.returns('req');
 
-      let opts = {
-        reqOpts: 'reqOpts',
+      let options = {
+        reqOptions: 'reqOptions',
         protocol: 'http',
         data: 'somedata',
         resolve: instance.resolve,
@@ -97,9 +97,9 @@ describe('adapter / main', () => {
       instance._performRequest();
 
       nassert.assert(instance.req, 'req');
-      nassert.assertFn({ inst: instance, fnName: '_createOpts', expectedArgs: ['protocol', 'timeout'] });
-      nassert.assertFn({ inst: instance, fnName: '_getReqOpts', expectedArgs: '_without-args_' });
-      nassert.assertFn({ inst: request, fnName: 'performRequest', expectedArgs: opts });
+      nassert.assertFn({ inst: instance, fnName: '_createOptions', expectedArgs: ['protocol', 'timeout'] });
+      nassert.assertFn({ inst: instance, fnName: '_getReqOptions', expectedArgs: '_without-args_' });
+      nassert.assertFn({ inst: request, fnName: 'performRequest', expectedArgs: options });
     });
   });
 
@@ -114,14 +114,14 @@ describe('adapter / main', () => {
 
     it('should build res options and call response.processResponse', () => {
       let instance = getInstance();
-      instance.opts = {};
+      instance.options = {};
       instance.req = 'req';
       instance.resolve = () => {};
       instance.reject = () => {};
-      sinon.stub(instance, '_createOpts').callsFake(() => ({ responseType: 'text', responseEncoding: 'utf8' }));
+      sinon.stub(instance, '_createOptions').callsFake(() => ({ responseType: 'text', responseEncoding: 'utf8' }));
 
       let res = 'res';
-      let opts = {
+      let options = {
         req: 'req',
         res: 'res',
         responseType: 'text',
@@ -132,15 +132,15 @@ describe('adapter / main', () => {
 
       instance._processResponse(res);
 
-      nassert.assertFn({ inst: instance, fnName: '_createOpts', expectedArgs: ['maxContentLength', 'responseType', 'responseEncoding'] });
-      nassert.assertFn({ inst: response, fnName: 'processResponse', expectedArgs: opts });
+      nassert.assertFn({ inst: instance, fnName: '_createOptions', expectedArgs: ['maxContentLength', 'responseType', 'responseEncoding'] });
+      nassert.assertFn({ inst: response, fnName: 'processResponse', expectedArgs: options });
     });
   });
 
-  describe('_createOpts', () => {
+  describe('_createOptions', () => {
     it('should clone and return requested options', () => {
       let instance = getInstance();
-      instance.opts = {
+      instance.options = {
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -152,8 +152,8 @@ describe('adapter / main', () => {
         data: 'somedata'
       };
 
-      let pickOpts = ['maxContentLength', 'responseType', 'responseEncoding'];
-      let actual = instance._createOpts(pickOpts);
+      let pickOptions = ['maxContentLength', 'responseType', 'responseEncoding'];
+      let actual = instance._createOptions(pickOptions);
 
       let expected = {
         maxContentLength: 25000,
@@ -164,18 +164,18 @@ describe('adapter / main', () => {
     });
   });
 
-  describe('_getReqOpts', () => {
+  describe('_getReqOptions', () => {
     before(() => {
-      sinon.stub(reqOptsBuilder, 'build');
+      sinon.stub(reqOptionsBuilder, 'build');
     });
 
     after(() => {
-      reqOptsBuilder.build.restore();
+      reqOptionsBuilder.build.restore();
     });
 
-    it('should call reqOptsBuilder.build and return result', () => {
+    it('should call reqOptionsBuilder.build and return result', () => {
       let instance = getInstance();
-      instance.opts = {
+      instance.options = {
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -198,13 +198,13 @@ describe('adapter / main', () => {
         data: 'somedata'
       };
 
-      let params = _.pick(instance.opts, ['method', 'baseUrl', 'url', 'params', 'auth', 'headers']);
-      reqOptsBuilder.build.returns('reqOpts');
+      let params = _.pick(instance.options, ['method', 'baseUrl', 'url', 'params', 'auth', 'headers']);
+      reqOptionsBuilder.build.returns('reqOptions');
 
-      let actual = instance._getReqOpts();
+      let actual = instance._getReqOptions();
 
-      nassert.assert(actual, 'reqOpts');
-      nassert.assertFn({ inst: reqOptsBuilder, fnName: 'build', expectedArgs: params });
+      nassert.assert(actual, 'reqOptions');
+      nassert.assertFn({ inst: reqOptionsBuilder, fnName: 'build', expectedArgs: params });
     });
   });
 

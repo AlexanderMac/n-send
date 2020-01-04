@@ -11,8 +11,8 @@ describe('core / main', () => {
 
   describe('static getInstance', () => {
     it('should create and return an instance of Core', () => {
-      let opts = { data: 'opts' };
-      let actual = Core.getInstance(opts);
+      let options = { data: 'options' };
+      let actual = Core.getInstance(options);
 
       let expected = {};
       nassert.assert(actual, expected);
@@ -29,14 +29,14 @@ describe('core / main', () => {
     });
 
     it('should create an instance of Core and call instance.send', async () => {
-      let opts = { data: 'opts' };
+      let options = { data: 'options' };
       Core.prototype.send.resolves('res');
 
-      let actual = await Core.send(opts);
+      let actual = await Core.send(options);
 
       let expected = 'res';
       nassert.assert(actual, expected);
-      nassert.assertFn({ inst: Core.prototype, fnName: 'send', expectedArgs: opts });
+      nassert.assertFn({ inst: Core.prototype, fnName: 'send', expectedArgs: options });
     });
   });
 
@@ -50,35 +50,35 @@ describe('core / main', () => {
     });
 
     it('should merge and validate options, perform request', async () => {
-      let opts = { data: 'opts' };
+      let options = { data: 'options' };
       let instance = getInstance();
-      _.extend(instance, opts);
-      sinon.stub(instance, '_mergeOpts');
-      sinon.stub(instance, '_validateOpts');
+      _.extend(instance, options);
+      sinon.stub(instance, '_mergeOptions');
+      sinon.stub(instance, '_validateOptions');
 
       let res = {
         headers: {}
       };
       adapter.performRequest.resolves(res);
 
-      let actual = await instance.send(opts);
+      let actual = await instance.send(options);
 
       let expected = res;
       nassert.assert(actual, expected);
 
-      nassert.assertFn({ inst: instance, fnName: '_mergeOpts', expectedArgs: opts });
-      nassert.assertFn({ inst: instance, fnName: '_validateOpts', expectedArgs: '_without-args_' });
-      nassert.assertFn({ inst: adapter, fnName: 'performRequest', expectedArgs: opts });
+      nassert.assertFn({ inst: instance, fnName: '_mergeOptions', expectedArgs: options });
+      nassert.assertFn({ inst: instance, fnName: '_validateOptions', expectedArgs: '_without-args_' });
+      nassert.assertFn({ inst: adapter, fnName: 'performRequest', expectedArgs: options });
     });
   });
 
-  describe('_mergeOpts', () => {
-    it('should merge opts with default when only required params (url) are provided', () => {
-      let opts = {
+  describe('_mergeOptions', () => {
+    it('should merge options with default when only required params (url) are provided', () => {
+      let options = {
         url: 'https://example.com/users'
       };
       let instance = getInstance();
-      instance._mergeOpts(opts);
+      instance._mergeOptions(options);
 
       let expected = {
         method: 'get',
@@ -91,8 +91,8 @@ describe('core / main', () => {
       nassert.assert(instance, expected);
     });
 
-    it('should merge opts with default when many options are provided', () => {
-      let opts = {
+    it('should merge options with default when many options are provided', () => {
+      let options = {
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -115,9 +115,9 @@ describe('core / main', () => {
         data: 'somedata'
       };
       let instance = getInstance();
-      instance._mergeOpts(opts);
+      instance._mergeOptions(options);
 
-      let expected = _.chain(opts)
+      let expected = _.chain(options)
         .cloneDeep()
         .extend({
           method: 'post',
@@ -131,10 +131,10 @@ describe('core / main', () => {
     });
   });
 
-  describe('_validateOpts', () => {
-    it('should validate opts', () => {
+  describe('_validateOptions', () => {
+    it('should validate options', () => {
       let instance = getInstance();
-      instance._validateOpts();
+      instance._validateOptions();
     });
   });
 });

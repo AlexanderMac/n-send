@@ -29,8 +29,8 @@ const res2 = await nsend.get('http://example.com');
 
 ```js
 {
-  // `baseURL` to resolve against if the input is not absolute
-  baseURL: 'https://example.com/api',
+  // `baseUrl` to resolve against if the input is not absolute
+  baseUrl: 'https://example.com/api',
 
   // `url` is the server URL that will be used for the request
   url: '/users',
@@ -87,14 +87,14 @@ There are aliases for all supported request methods.
 ```js
 const nsend = require('nsend');
 
-nsend.request(opts?)
-nsend.get(url, opts?)
-nsend.delete(url, opts?)
-nsend.head(url, opts?)
-nsend.options(url, opts?)
-nsend.post(url, data?, opts?)
-nsend.put(url, data?, opts?)
-nsend.patch(url, data?, opts?)
+nsend.request(options?)
+nsend.get(url, options?)
+nsend.delete(url, options?)
+nsend.head(url, options?)
+nsend.options(url, options?)
+nsend.post(url, data?, options?)
+nsend.put(url, data?, options?)
+nsend.patch(url, data?, options?)
 ```
 
 ## Author

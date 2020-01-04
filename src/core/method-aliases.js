@@ -3,8 +3,8 @@ const Core = require('./');
 
 exports.extend = (nsend) => {
   _.each(['get', 'head', 'options', 'delete'], (method) => {
-    nsend[method] = (url, opts) => {
-      return Core.send(_extendOpts(opts, {
+    nsend[method] = (url, options) => {
+      return Core.send(_extendOptions(options, {
         method,
         url
       }));
@@ -12,8 +12,8 @@ exports.extend = (nsend) => {
   });
 
   _.each(['post', 'put', 'patch'], (method) => {
-    nsend[method] = (url, data, opts) => {
-      return Core.send(_extendOpts(opts, {
+    nsend[method] = (url, data, options) => {
+      return Core.send(_extendOptions(options, {
         method,
         url,
         data
@@ -22,8 +22,8 @@ exports.extend = (nsend) => {
   });
 };
 
-function _extendOpts(opts, ex) {
-  return _.chain(opts)
+function _extendOptions(options, ex) {
+  return _.chain(options)
     .cloneDeep()
     .extend(ex)
     .value();

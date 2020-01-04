@@ -1,4 +1,4 @@
-const DEFAULT_OPTS = {
+const DEFAULT_OPTIONS = {
   method: 'get',
   maxContentLength: 10000,
   maxRedirects: 0,
@@ -6,7 +6,7 @@ const DEFAULT_OPTS = {
   responseEncoding: 'utf8'
 };
 
-const ALLOWED_OPT_KEYS = [
+const ALLOWED_OPTION_KEYS = [
   'httpVer',
   'method',
   'baseUrl',
@@ -22,7 +22,7 @@ const ALLOWED_OPT_KEYS = [
   'responseEncoding'
 ];
 
-const ADAPTER_KEYS = [
+const ADAPTER_OPTION_KEYS = [
   'httpVer',
   'method',
   'baseUrl',
@@ -37,7 +37,7 @@ const ADAPTER_KEYS = [
   'responseEncoding'
 ];
 
-const REQUEST_KEYS = [
+const REQUEST_OPTION_KEYS = [
   'method',
   'baseUrl',
   'url',
@@ -49,9 +49,9 @@ const REQUEST_KEYS = [
 const SAFE_METHODS = ['get', 'head', 'options', 'trace'];
 
 module.exports = {
-  DEFAULT_OPTS,
-  ALLOWED_OPT_KEYS,
-  ADAPTER_KEYS,
-  REQUEST_KEYS,
+  DEFAULT_OPTIONS,
+  ALLOWED_OPTION_KEYS,
+  ADAPTER_OPTION_KEYS,
+  REQUEST_OPTION_KEYS,
   SAFE_METHODS
 };

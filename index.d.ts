@@ -44,7 +44,7 @@ interface NSendResponse {
 }
 
 interface NSendError extends Error {
-  opts: NSendRequestOptions;
+  options: NSendRequestOptions;
   code?: string;
   request?: any;
   response?: NSendResponse;
@@ -55,17 +55,17 @@ interface NSendPromise extends Promise<NSendResponse> {
 
 interface NSendCore {
   getInstance(): NSendCore;
-  send(opts: NSendRequestOptions): NSendPromise;
+  send(options: NSendRequestOptions): NSendPromise;
 }
 
 interface NSendInstance {
-  (opts: NSendRequestOptions): NSendPromise;
-  get(url: string, opts?: NSendRequestOptions): NSendPromise;
-  delete(url: string, opts?: NSendRequestOptions): NSendPromise;
-  head(url: string, opts?: NSendRequestOptions): NSendPromise;
-  post(url: string, data?: any, opts?: NSendRequestOptions): NSendPromise;
-  put(url: string, data?: any, opts?: NSendRequestOptions): NSendPromise;
-  patch(url: string, data?: any, opts?: NSendRequestOptions): NSendPromise;
+  (options: NSendRequestOptions): NSendPromise;
+  get(url: string, options?: NSendRequestOptions): NSendPromise;
+  delete(url: string, options?: NSendRequestOptions): NSendPromise;
+  head(url: string, options?: NSendRequestOptions): NSendPromise;
+  post(url: string, data?: any, options?: NSendRequestOptions): NSendPromise;
+  put(url: string, data?: any, options?: NSendRequestOptions): NSendPromise;
+  patch(url: string, data?: any, options?: NSendRequestOptions): NSendPromise;
   NSend: NSendCore;
   NSendError: NSendError
 }

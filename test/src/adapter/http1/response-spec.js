@@ -3,8 +3,8 @@ const nassert = require('n-assert');
 const Response = require('../../../../src/adapter/http1/response');
 
 describe('adapter / http1 / response', () => {
-  function getInstance(opts = {}) {
-    return new Response(opts);
+  function getInstance(options = {}) {
+    return new Response(options);
   }
 
   describe('static processResponse', () => {
@@ -20,8 +20,8 @@ describe('adapter / http1 / response', () => {
       let res = 'res';
       Response.prototype.processResponse.returns(res);
 
-      let opts = { data: 'opts' };
-      let actual = Response.processResponse(opts);
+      let options = { data: 'options' };
+      let actual = Response.processResponse(options);
 
       let expected = res;
       nassert.assert(actual, expected);

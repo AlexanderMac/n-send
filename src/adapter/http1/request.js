@@ -4,13 +4,13 @@ const NSendError = require('../../error');
 const checks = require('../../utils/checks');
 
 class NSendRequest {
-  static performRequest(opts) {
-    let instance = new NSendRequest(opts);
+  static performRequest(options) {
+    let instance = new NSendRequest(options);
     return instance.performRequest();
   }
 
-  constructor({ reqOpts, protocol, timeout, data, processResponse, resolve, reject }) {
-    this.reqOpts = reqOpts;
+  constructor({ reqOptions, protocol, timeout, data, processResponse, resolve, reject }) {
+    this.reqOptions = reqOptions;
     this.protocol = protocol;
     this.timeout = timeout;
     this.data = data;
@@ -24,7 +24,7 @@ class NSendRequest {
     let data = this._transformRequestData();
     let transport = this._getTransport();
 
-    let req = transport.request(this.reqOpts, this.processResponse);
+    let req = transport.request(this.reqOptions, this.processResponse);
 
     req.on('error', err => {
       if (req.aborted) {
@@ -63,12 +63,12 @@ class NSendRequest {
   }
 
   _getTransport() {
-    let isHttps = this.reqOpts.protocol === 'https:';
+    let isHttps = this.reqOptions.protocol === 'https:';
     return isHttps ? https : http;
   }
 
   _transformRequestData() {
-    let headers = this.reqOpts.headers;
+    let headers = this.reqOptions.headers;
     let data = this.data;
     if (checks.isNil(data)) {
       return data;
@@ -78,7 +78,7 @@ class NSendRequest {
     }
 
     if (checks.isBuffer(data)) {
-      // Nothing to do...
+      // Nothing
     } else if (checks.isString(data)) {
       data = Buffer.from(data, 'utf8');
     } else if (checks.isObject(data)) {

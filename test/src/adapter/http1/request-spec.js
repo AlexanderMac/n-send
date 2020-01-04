@@ -9,8 +9,8 @@ const Request = require('../../../../src/adapter/http1/request');
 const NSendError = require('../../../../src/error');
 
 describe('adapter / http1 / request', () => {
-  function getInstance(opts = {}) {
-    return new Request(opts);
+  function getInstance(options = {}) {
+    return new Request(options);
   }
 
   describe('static performRequest', () => {
@@ -26,8 +26,8 @@ describe('adapter / http1 / request', () => {
       let req = 'req';
       Request.prototype.performRequest.returns(req);
 
-      let opts = { data: 'opts' };
-      let actual = Request.performRequest(opts);
+      let options = { data: 'options' };
+      let actual = Request.performRequest(options);
 
       let expected = req;
       nassert.assert(actual, expected);
@@ -62,7 +62,7 @@ describe('adapter / http1 / request', () => {
 
     function test({ reqAbortArgs, reqEndArgs, resolveArgs, rejectArgs }) {
       let instance = getInstance({
-        reqOpts: 'reqOpts',
+        reqOptions: 'reqOptions',
         resolve: () => {},
         reject: () => {}
       });
@@ -79,7 +79,7 @@ describe('adapter / http1 / request', () => {
       nassert.assertFn({ inst: instance, fnName: '_transformRequestData', expectedArgs: '_without-args_' });
       nassert.assertFn({ inst: instance, fnName: '_getTransport', expectedArgs: '_without-args_' });
 
-      nassert.assertFn({ inst: fakeTransport, fnName: 'request', expectedMultipleArgs: ['reqOpts', instance.processResponse] });
+      nassert.assertFn({ inst: fakeTransport, fnName: 'request', expectedMultipleArgs: ['reqOptions', instance.processResponse] });
       nassert.assertFn({ inst: fakeReq, fnName: 'on', expectedMultipleArgs: ['error', () => {}] });
       nassert.assertFn({ inst: fakeReq, fnName: 'abort', expectedArgs: reqAbortArgs });
       nassert.assertFn({ inst: fakeReq, fnName: 'end', expectedArgs: reqEndArgs });
@@ -98,7 +98,7 @@ describe('adapter / http1 / request', () => {
   describe('_getTransport', () => {
     it('should return http when protocol is `http`', () => {
       let instance = getInstance({
-        reqOpts: { protocol: 'http:' }
+        reqOptions: { protocol: 'http:' }
       });
 
       let transport = instance._getTransport();
@@ -108,7 +108,7 @@ describe('adapter / http1 / request', () => {
 
     it('should return https when protocol is `https`', () => {
       let instance = getInstance({
-        reqOpts: { protocol: 'https:' }
+        reqOptions: { protocol: 'https:' }
       });
 
       let transport = instance._getTransport();
@@ -118,7 +118,7 @@ describe('adapter / http1 / request', () => {
   });
 
   describe('_transformRequestData', () => {
-    function getDefReqOpts() {
+    function getDefReqOptions() {
       return {
         headers: {
           'content-encoding': 'utf8'
@@ -128,7 +128,7 @@ describe('adapter / http1 / request', () => {
 
     it('should return undefined when data is undefined', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts()
+        reqOptions: getDefReqOptions()
       });
 
       let actual = instance._transformRequestData();
@@ -138,13 +138,13 @@ describe('adapter / http1 / request', () => {
           'content-encoding': 'utf8'
         }
       };
-      nassert.assert(instance.reqOpts.headers, expected.headers);
+      nassert.assert(instance.reqOptions.headers, expected.headers);
       nassert.assert(actual, expected.data);
     });
 
     it('should return unchanged stream when data is Stream', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts(),
+        reqOptions: getDefReqOptions(),
         data: new stream.Readable()
       });
 
@@ -156,13 +156,13 @@ describe('adapter / http1 / request', () => {
           'content-encoding': 'utf8'
         }
       };
-      nassert.assert(instance.reqOpts.headers, expected.headers);
+      nassert.assert(instance.reqOptions.headers, expected.headers);
       nassert.assert(actual === instance.data, true);
     });
 
     it('should set headers.contentLength and return unchanged buffer when data is Buffer', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts(),
+        reqOptions: getDefReqOptions(),
         data: Buffer.from('some-data', 'utf8')
       });
 
@@ -175,13 +175,13 @@ describe('adapter / http1 / request', () => {
           'content-length': 9
         }
       };
-      nassert.assert(instance.reqOpts.headers, expected.headers);
+      nassert.assert(instance.reqOptions.headers, expected.headers);
       nassert.assert(actual === instance.data, true);
     });
 
     it('should set headers.contentLength and return buffer when data is String', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts(),
+        reqOptions: getDefReqOptions(),
         data: 'some-string-data'
       });
 
@@ -194,14 +194,14 @@ describe('adapter / http1 / request', () => {
           'content-length': 16
         }
       };
-      nassert.assert(instance.reqOpts.headers, expected.headers);
+      nassert.assert(instance.reqOptions.headers, expected.headers);
       nassert.assert(_.isBuffer(actual), true);
       nassert.assert(actual.toString(), 'some-string-data');
     });
 
     it('should set headers.contentLength and return buffer when data is Object', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts(),
+        reqOptions: getDefReqOptions(),
         data: {
           name: 'John'
         }
@@ -216,14 +216,14 @@ describe('adapter / http1 / request', () => {
           'content-length': 15
         }
       };
-      nassert.assert(instance.reqOpts.headers, expected.headers);
+      nassert.assert(instance.reqOptions.headers, expected.headers);
       nassert.assert(_.isBuffer(actual), true);
       nassert.assert(actual.toString(), '{"name":"John"}');
     });
 
     it('should throw error when data type is not supported', () => {
       let instance = getInstance({
-        reqOpts: getDefReqOpts(),
+        reqOptions: getDefReqOptions(),
         data: 15
       });
 

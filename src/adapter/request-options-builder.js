@@ -1,10 +1,10 @@
 const _ = require('lodash');
-const { URL, URLSearchParams } = require('url');
+const { URLSearchParams } = require('url');
 const utils = require('../utils');
 
 class NSendRequestOptionsBuilder {
-  static build(opts) {
-    let instance = new NSendRequestOptionsBuilder(opts);
+  static build(options) {
+    let instance = new NSendRequestOptionsBuilder(options);
     return instance.build();
   }
 

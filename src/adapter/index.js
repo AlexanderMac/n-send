@@ -2,16 +2,16 @@ const _ = require('lodash');
 const consts = require('../consts');
 const request = require('./http1/request');
 const response = require('./http1/response');
-const reqOptsBuilder = require('./request-options-builder');
+const reqOptionsBuilder = require('./request-options-builder');
 
 class NSendAdapter {
-  static performRequest(opts) {
-    let instance = new NSendAdapter(opts);
+  static performRequest(options) {
+    let instance = new NSendAdapter(options);
     return instance.performRequest();
   }
 
-  constructor(opts) {
-    this.opts = opts;
+  constructor(options) {
+    this.options = options;
   }
 
   performRequest() {
@@ -23,34 +23,34 @@ class NSendAdapter {
   }
 
   _performRequest() {
-    let opts = this._createOpts(['protocol', 'timeout']);
-    opts.reqOpts = this._getReqOpts();
-    opts.data = this.opts.data;
-    opts.resolve = this.resolve;
-    opts.reject = this.reject;
-    opts.processResponse = this._processResponse.bind(this);
-    this.req = request.performRequest(opts);
+    let options = this._createOptions(['protocol', 'timeout']);
+    options.reqOptions = this._getReqOptions();
+    options.data = this.options.data;
+    options.resolve = this.resolve;
+    options.reject = this.reject;
+    options.processResponse = this._processResponse.bind(this);
+    this.req = request.performRequest(options);
   }
 
   _processResponse(res) {
-    let opts = this._createOpts(['maxContentLength', 'responseType', 'responseEncoding']);
-    opts.req = this.req;
-    opts.res = res;
-    opts.resolve = this.resolve;
-    opts.reject = this.reject;
-    response.processResponse(opts);
+    let options = this._createOptions(['maxContentLength', 'responseType', 'responseEncoding']);
+    options.req = this.req;
+    options.res = res;
+    options.resolve = this.resolve;
+    options.reject = this.reject;
+    response.processResponse(options);
   }
 
-  _createOpts(pickOpts) {
-    return _.chain(this.opts)
-      .pick(pickOpts)
+  _createOptions(pickOptions) {
+    return _.chain(this.options)
+      .pick(pickOptions)
       .clone()
       .value();
   }
 
-  _getReqOpts() {
-    let reqOpts = _.pick(this.opts, consts.REQUEST_KEYS);
-    return reqOptsBuilder.build(reqOpts);
+  _getReqOptions() {
+    let reqOptions = _.pick(this.options, consts.REQUEST_OPTION_KEYS);
+    return reqOptionsBuilder.build(reqOptions);
   }
 
   _cleanup() {
