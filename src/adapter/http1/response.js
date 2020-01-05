@@ -8,14 +8,13 @@ class NSendResponse {
     return instance.processResponse();
   }
 
-  constructor({ req, res, maxContentLength, responseType, responseEncoding, resolve, reject }) {
+  constructor({ req, res, maxContentLength, responseType, responseEncoding, done }) {
     this.req = req;
     this.res = res;
     this.maxContentLength = maxContentLength;
     this.responseType = responseType;
     this.responseEncoding = responseEncoding;
-    this.resolve = resolve;
-    this.reject = reject;
+    this.done = done;
   }
 
   processResponse() {
@@ -46,7 +45,7 @@ class NSendResponse {
     };
     if (this.responseType === 'stream') {
       this.response.data = this.resStream;
-      return this.resolve(this.response);
+      return this.done(this.response);
     }
     this._processResponseStream();
   }
@@ -58,21 +57,21 @@ class NSendResponse {
       if (this.req.aborted) {
         return;
       }
-      this.reject(new NSendError(err));
+      this.done(new NSendError(err));
     });
 
     this.resStream.on('data', chunk => {
       resDataBuffer.push(chunk);
       if (this.maxContentLength > -1 && Buffer.concat(resDataBuffer).length > this.maxContentLength) {
         this.resStream.destroy();
-        this.reject(new NSendError('MaxContentLength size of ' + this.maxContentLength + ' exceeded'));
+        this.done(new NSendError('MaxContentLength size of ' + this.maxContentLength + ' exceeded'));
       }
     });
 
     this.resStream.on('end', () => {
       let resData = Buffer.concat(resDataBuffer).toString(this.responseEncoding);
       this.response.data = this._transformResponseData(resData);
-      this.resolve(this.response);
+      this.done(this.response);
     });
   }
 

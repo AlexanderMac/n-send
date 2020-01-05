@@ -1,57 +1,86 @@
-const DEFAULT_OPTIONS = {
-  method: 'get',
-  maxContentLength: 10000,
-  maxRedirects: 0,
-  responseType: 'text',
-  responseEncoding: 'utf8'
+const BASE_OPTION_KEYS = {
+  httpVer: 'httpVer',
+  method: 'method',
+  baseUrl: 'baseUrl',
+  url: 'url',
+  params: 'params',
+  auth: 'auth',
+  headers: 'headers',
+  data: 'data',
+  timeout: 'timeout',
+  maxContentLength: 'maxContentLength',
+  maxRedirects: 'maxRedirects',
+  responseType: 'responseType',
+  responseEncoding: 'responseEncoding'
 };
 
-const ALLOWED_OPTION_KEYS = [
-  'httpVer',
-  'method',
-  'baseUrl',
-  'url',
-  'params',
-  'auth',
-  'headers',
-  'data',
-  'timeout',
-  'maxContentLength',
-  'maxRedirects',
-  'responseType',
-  'responseEncoding'
+const DEFAULT_OPTIONS = {
+  [BASE_OPTION_KEYS.httpVer]: 'http/1',
+  [BASE_OPTION_KEYS.method]: 'get',
+  [BASE_OPTION_KEYS.maxContentLength]: 10000,
+  [BASE_OPTION_KEYS.maxRedirects]: 0,
+  [BASE_OPTION_KEYS.responseType]: 'text',
+  [BASE_OPTION_KEYS.responseEncoding]: 'utf8'
+};
+
+const CORE_OPTION_KEYS = [
+  BASE_OPTION_KEYS.httpVer,
+  BASE_OPTION_KEYS.method,
+  BASE_OPTION_KEYS.baseUrl,
+  BASE_OPTION_KEYS.url,
+  BASE_OPTION_KEYS.params,
+  BASE_OPTION_KEYS.auth,
+  BASE_OPTION_KEYS.headers,
+  BASE_OPTION_KEYS.data,
+  BASE_OPTION_KEYS.timeout,
+  BASE_OPTION_KEYS.maxContentLength,
+  BASE_OPTION_KEYS.maxRedirects,
+  BASE_OPTION_KEYS.responseType,
+  BASE_OPTION_KEYS.responseEncoding
 ];
 
 const ADAPTER_OPTION_KEYS = [
-  'httpVer',
-  'method',
-  'baseUrl',
-  'url',
-  'params',
-  'auth',
-  'headers',
-  'data',
-  'timeout',
-  'maxContentLength',
-  'responseType',
-  'responseEncoding'
+  BASE_OPTION_KEYS.httpVer,
+  BASE_OPTION_KEYS.method,
+  BASE_OPTION_KEYS.baseUrl,
+  BASE_OPTION_KEYS.url,
+  BASE_OPTION_KEYS.params,
+  BASE_OPTION_KEYS.auth,
+  BASE_OPTION_KEYS.headers,
+  BASE_OPTION_KEYS.data,
+  BASE_OPTION_KEYS.timeout,
+  BASE_OPTION_KEYS.maxContentLength,
+  BASE_OPTION_KEYS.responseType,
+  BASE_OPTION_KEYS.responseEncoding
 ];
 
 const REQUEST_OPTION_KEYS = [
-  'method',
-  'baseUrl',
-  'url',
-  'params',
-  'auth',
-  'headers'
+  BASE_OPTION_KEYS.method,
+  BASE_OPTION_KEYS.baseUrl,
+  BASE_OPTION_KEYS.url,
+  BASE_OPTION_KEYS.params,
+  BASE_OPTION_KEYS.auth,
+  BASE_OPTION_KEYS.headers,
+  BASE_OPTION_KEYS.data,
+  BASE_OPTION_KEYS.timeout,
+  BASE_OPTION_KEYS.maxContentLength,
+  BASE_OPTION_KEYS.responseType,
+  BASE_OPTION_KEYS.responseEncoding
+];
+
+const RESPONSE_OPTION_KEYS = [
+  BASE_OPTION_KEYS.maxContentLength,
+  BASE_OPTION_KEYS.responseType,
+  BASE_OPTION_KEYS.responseEncoding
 ];
 
 const SAFE_METHODS = ['get', 'head', 'options', 'trace'];
 
 module.exports = {
   DEFAULT_OPTIONS,
-  ALLOWED_OPTION_KEYS,
+  CORE_OPTION_KEYS,
   ADAPTER_OPTION_KEYS,
   REQUEST_OPTION_KEYS,
+  RESPONSE_OPTION_KEYS,
   SAFE_METHODS
 };

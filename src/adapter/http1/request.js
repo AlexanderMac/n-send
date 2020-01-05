@@ -1,7 +1,11 @@
+const _ = require('lodash');
 const http = require('http');
 const https = require('https');
+const consts = require('../../consts');
 const NSendError = require('../../error');
 const checks = require('../../utils/checks');
+const reqOptionsBuilder = require('../request-options-builder');
+const response = require('./response');
 
 class NSendRequest {
   static performRequest(options) {
@@ -9,28 +13,26 @@ class NSendRequest {
     return instance.performRequest();
   }
 
-  constructor({ reqOptions, protocol, timeout, data, processResponse, resolve, reject }) {
-    this.reqOptions = reqOptions;
-    this.protocol = protocol;
-    this.timeout = timeout;
+  constructor({ data, timeout, done, ...options }) {
+    this.options = options;
     this.data = data;
-    this.processResponse = processResponse;
-    this.resolve = resolve;
-    this.reject = reject;
+    this.timeout = timeout;
+    this.done = done;
   }
 
-  // TODO: test it
   performRequest() {
-    let data = this._transformRequestData();
-    let transport = this._getTransport();
+    let reqOptions = _.pick(this.options, consts.REQUEST_OPTION_KEYS);
+    reqOptions = reqOptionsBuilder.build(reqOptions);
 
-    let req = transport.request(this.reqOptions, this.processResponse);
+    let data = this._transformRequestData(reqOptions.headers, this.data);
+    let transport = this._getTransport(reqOptions.protocol);
+    this.req = transport.request(reqOptions, this._processResponse.bind(this));
 
-    req.on('error', err => {
-      if (req.aborted) {
+    this.req.on('error', err => {
+      if (this.req.aborted) {
         return;
       }
-      this.reject(new NSendError(err));
+      this.done(new NSendError(err));
     });
 
     if (this.timeout) {
@@ -38,38 +40,28 @@ class NSendRequest {
         if (this.finalized) {
           return;
         }
-        req.abort();
-        this.reject(new NSendError('Timeout of ' + this.timeout + 'ms exceeded'));
+        this.req.abort();
+        this.done(new NSendError('Timeout of ' + this.timeout + 'ms exceeded'));
       }, this.timeout);
     }
 
     if (checks.isStream(data)) {
       data
-        .on('error', err => this.reject(new NSendError(err)))
-        .pipe(req);
+        .on('error', err => this.done(new NSendError(err)))
+        .pipe(this.req);
     } else {
-      req.end(data);
+      this.req.end(data);
     }
 
-    req.finalize = () => {
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
-      this.finalized = true;
-    };
-
-    return req;
+    return this;
   }
 
-  _getTransport() {
-    let isHttps = this.reqOptions.protocol === 'https:';
+  _getTransport(protocol) {
+    let isHttps = protocol === 'https:';
     return isHttps ? https : http;
   }
 
-  _transformRequestData() {
-    let headers = this.reqOptions.headers;
-    let data = this.data;
+  _transformRequestData(headers, data) {
     if (checks.isNil(data)) {
       return data;
     }
@@ -90,6 +82,26 @@ class NSendRequest {
     headers['content-length'] = data.length;
 
     return data;
+  }
+
+  _processResponse(res) {
+    let resOptions = _.chain(this.options)
+      .pick(consts.RESPONSE_OPTION_KEYS)
+      .extend({
+        req: this.req,
+        res,
+        done: this.done
+      })
+      .value();
+    response.processResponse(resOptions);
+  }
+
+  finalize() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    this.finalized = true;
   }
 }
 

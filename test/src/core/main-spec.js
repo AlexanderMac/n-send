@@ -12,9 +12,10 @@ describe('core / main', () => {
   describe('static getInstance', () => {
     it('should create and return an instance of Core', () => {
       let options = { data: 'options' };
-      let actual = Core.getInstance(options);
 
+      let actual = Core.getInstance(options);
       let expected = {};
+
       nassert.assert(actual, expected);
     });
   });
@@ -33,8 +34,8 @@ describe('core / main', () => {
       Core.prototype.send.resolves('res');
 
       let actual = await Core.send(options);
-
       let expected = 'res';
+
       nassert.assert(actual, expected);
       nassert.assertFn({ inst: Core.prototype, fnName: 'send', expectedArgs: options });
     });
@@ -50,7 +51,7 @@ describe('core / main', () => {
     });
 
     it('should merge and validate options, perform request', async () => {
-      let options = { data: 'options' };
+      let options = { data: 'data' };
       let instance = getInstance();
       _.extend(instance, options);
       sinon.stub(instance, '_mergeOptions');
@@ -62,10 +63,9 @@ describe('core / main', () => {
       adapter.performRequest.resolves(res);
 
       let actual = await instance.send(options);
-
       let expected = res;
-      nassert.assert(actual, expected);
 
+      nassert.assert(actual, expected);
       nassert.assertFn({ inst: instance, fnName: '_mergeOptions', expectedArgs: options });
       nassert.assertFn({ inst: instance, fnName: '_validateOptions', expectedArgs: '_without-args_' });
       nassert.assertFn({ inst: adapter, fnName: 'performRequest', expectedArgs: options });
@@ -74,13 +74,14 @@ describe('core / main', () => {
 
   describe('_mergeOptions', () => {
     it('should merge options with default when only required params (url) are provided', () => {
+      let instance = getInstance();
       let options = {
         url: 'https://example.com/users'
       };
-      let instance = getInstance();
-      instance._mergeOptions(options);
 
+      instance._mergeOptions(options);
       let expected = {
+        httpVer: 'http/1',
         method: 'get',
         url: 'https://example.com/users',
         maxContentLength: 10000,
@@ -88,11 +89,14 @@ describe('core / main', () => {
         responseType: 'text',
         responseEncoding: 'utf8'
       };
+
       nassert.assert(instance, expected);
     });
 
     it('should merge options with default when many options are provided', () => {
+      let instance = getInstance();
       let options = {
+        httpVer: 'http/2',
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -114,12 +118,12 @@ describe('core / main', () => {
         responseEncoding: 'utf8',
         data: 'somedata'
       };
-      let instance = getInstance();
-      instance._mergeOptions(options);
 
+      instance._mergeOptions(options);
       let expected = _.chain(options)
         .cloneDeep()
         .extend({
+          httpVer: 'http/2',
           method: 'post',
           headers: {
             'content-type': 'text/plain',
@@ -127,14 +131,73 @@ describe('core / main', () => {
           }
         })
         .value();
+
       nassert.assert(instance, expected);
     });
   });
 
   describe('_validateOptions', () => {
-    it('should validate options', () => {
+    it.skip('should validate options', () => {
+    });
+  });
+
+  describe('_getAdapterOptions', () => {
+    it('should build adapter options object', () => {
       let instance = getInstance();
-      instance._validateOptions();
+      _.extend(instance, {
+        httpVer: 'http/2',
+        method: 'POST',
+        baseUrl: 'https://example.com',
+        url: '/users',
+        params: {
+          ts: 1857295727634
+        },
+        auth: {
+          username: 'john',
+          password: 'pass'
+        },
+        headers: {
+          'content-Type': 'text/plain',
+          Connection: 'keep-alive'
+        },
+        timeout: 5000,
+        maxContentLength: 25000,
+        maxRedirects: 25,
+        responseType: 'text',
+        responseEncoding: 'utf8',
+        data: 'somedata'
+      });
+
+      let actual = instance._getAdapterOptions();
+      let expected = {
+        httpVer: 'http/2',
+        method: 'POST',
+        baseUrl: 'https://example.com',
+        url: '/users',
+        params: {
+          ts: 1857295727634
+        },
+        auth: {
+          username: 'john',
+          password: 'pass'
+        },
+        headers: {
+          'content-Type': 'text/plain',
+          Connection: 'keep-alive'
+        },
+        timeout: 5000,
+        maxContentLength: 25000,
+        responseType: 'text',
+        responseEncoding: 'utf8',
+        data: 'somedata'
+      };
+
+      nassert.assert(actual, expected);
+    });
+  });
+
+  describe('_followRedirects', () => {
+    it.skip('should follow redirects', () => {
     });
   });
 });
