@@ -93,12 +93,7 @@ describe('http2 / functional tests', () => {
   describe('base params', () => {
     function handler() {
       return (req, res) => {
-        let parsedUrl = url.parse(req.url);
-        if (parsedUrl.pathname === '/users/1') {
-          _sendSuccess(req, res, 200, 'user1');
-        } else {
-          _sendNotFound(res);
-        }
+        _sendSuccess(req, res, 200, 'user1');
       };
     }
 
@@ -272,12 +267,7 @@ describe('http2 / functional tests', () => {
   describe('timeout', () => {
     function handler(timeout) {
       return (req, res) => {
-        let parsedUrl = url.parse(req.url);
-        if (parsedUrl.pathname === '/users/1') {
-          setTimeout(() => _sendSuccess(req, res, 200, 'user1'), timeout);
-        } else {
-          _sendNotFound(res);
-        }
+        setTimeout(() => _sendSuccess(req, res, 200, 'user1'), timeout);
       };
     }
 
@@ -321,12 +311,7 @@ describe('http2 / functional tests', () => {
   describe('data', () => {
     function handler() {
       return (req, res, body) => {
-        let parsedUrl = url.parse(req.url);
-        if (parsedUrl.pathname === '/users') {
-          _sendSuccess(req, res, 200, body);
-        } else {
-          _sendNotFound(res);
-        }
+        _sendSuccess(req, res, 200, body);
       };
     }
 
@@ -411,13 +396,8 @@ describe('http2 / functional tests', () => {
   describe('maxContentLength', () => {
     function handler(count) {
       return (req, res) => {
-        let parsedUrl = url.parse(req.url);
-        if (parsedUrl.pathname === '/users') {
-          let data = _.times(count, Number).join('');
-          _sendSuccess(req, res, 201, data);
-        } else {
-          _sendNotFound(res);
-        }
+        let data = _.times(count, Number).join('');
+        _sendSuccess(req, res, 201, data);
       };
     }
 
@@ -576,12 +556,7 @@ describe('http2 / functional tests', () => {
   describe('responseType', () => {
     function handler() {
       return (req, res) => {
-        let parsedUrl = url.parse(req.url);
-        if (parsedUrl.pathname === '/users/1') {
-          _sendSuccess(req, res, 200, { user: 'user1' });
-        } else {
-          _sendNotFound(res);
-        }
+        _sendSuccess(req, res, 200, { user: 'user1' });
       };
     }
 
@@ -668,12 +643,46 @@ describe('http2 / functional tests', () => {
   });
 
   describe('responseEncoding', () => {
-    it.skip('should use options.responseEncoding=utf8', () => {
-      // TODO: implement it
+    function handler() {
+      return (req, res) => {
+        _sendSuccess(req, res, 200, { user: 'user1' });
+      };
+    }
+
+    it('should use options.responseEncoding=utf8', done => {
+      let options = {
+        protocolVersion: 'http/2.0',
+        method: 'GET',
+        url: 'http://localhost:3010/users/1',
+        responseType: 'text',
+        responseEncoding: 'utf8'
+      };
+      let statusCode = 200;
+      let expected = JSON.stringify({
+        headers: {
+          ':scheme': 'http',
+          ':authority': 'localhost:3010',
+          ':path': '/users/1',
+          ':method': 'get'
+        },
+        data: { user: 'user1' }
+      });
+
+      _createServer(handler(30), _test(options, statusCode, expected, done));
     });
 
-    it.skip('should use options.responseEncoding=utf16', () => {
-      // TODO: implement it
+    it('should use options.responseEncoding=utf16le', done => {
+      let options = {
+        protocolVersion: 'http/2.0',
+        method: 'GET',
+        url: 'http://localhost:3010/users/1',
+        responseType: 'text',
+        responseEncoding: 'utf16le'
+      };
+      let statusCode = 200;
+      let expected = '≻敨摡牥≳笺㨢捳敨敭㨢栢瑴≰∬愺瑵潨楲祴㨢氢捯污潨瑳㌺㄰∰∬瀺瑡≨∺甯敳獲ㄯⰢ㨢敭桴摯㨢朢瑥索∬慤慴㨢≻獵牥㨢產敳ㅲ索';
+
+      _createServer(handler(30), _test(options, statusCode, expected, done));
     });
   });
 });

@@ -33,58 +33,7 @@ describe('adapter / http1 / request', () => {
   });
 
   describe.skip('performRequest', () => {
-    // TODO: doesn't work
-    let fakeReq = {
-      on: () => {},
-      abort: () => {},
-      end: () => {}
-    };
-
-    let fakeTransport = {
-      request: () => fakeReq
-    };
-
-    beforeEach(() => {
-      sinon.stub(fakeTransport, 'request').returns(fakeReq);
-      sinon.stub(fakeReq, 'on');
-      sinon.stub(fakeReq, 'abort');
-      sinon.stub(fakeReq, 'end');
-    });
-
-    afterEach(() => {
-      fakeTransport.request.restore();
-      fakeReq.on.restore();
-      fakeReq.abort.restore();
-      fakeReq.end.restore();
-    });
-
-    function test({ reqAbortArgs, reqEndArgs, doneArgs }) {
-      let instance = getInstance({
-        options: 'options',
-        done: () => {}
-      });
-      instance.processResponse = () => {};
-      sinon.stub(instance, '_transformRequestData').returns('some-data');
-      sinon.stub(instance, '_getTransport').returns(fakeTransport);
-      sinon.stub(instance, 'done');
-
-      let actual = instance.performRequest();
-      let expected = fakeReq;
-
-      nassert.assert(actual, expected);
-      nassert.assertFn({ inst: instance, fnName: '_transformRequestData', expectedArgs: '_without-args_' });
-      nassert.assertFn({ inst: instance, fnName: '_getTransport', expectedArgs: '_without-args_' });
-
-      nassert.assertFn({ inst: fakeTransport, fnName: 'request', expectedMultipleArgs: ['reqOptions', instance.processResponse] });
-      nassert.assertFn({ inst: fakeReq, fnName: 'on', expectedMultipleArgs: ['error', () => {}] });
-      nassert.assertFn({ inst: fakeReq, fnName: 'abort', expectedArgs: reqAbortArgs });
-      nassert.assertFn({ inst: fakeReq, fnName: 'end', expectedArgs: reqEndArgs });
-      nassert.assertFn({ inst: instance, fnName: 'done', expectedArgs: doneArgs });
-    }
-
-    it('should TODO', () => {
-      test();
-    });
+    // TODO: implement it
   });
 
   describe('_getTransport', () => {

@@ -120,7 +120,7 @@ describe('adapter / request-options-builder', () => {
   });
 
   describe('_parseParams', () => {
-    it('should skip when params are not defined', () => {
+    it('should return when params are not defined', () => {
       let instance = getInstance();
       instance.path = '/users';
 
@@ -161,7 +161,7 @@ describe('adapter / request-options-builder', () => {
   });
 
   describe('_parseAuth', () => {
-    it('should skip when auth, username and password are not defined', () => {
+    it('should return when auth, username and password are not defined', () => {
       let instance = getInstance({
         headers: {
           authorization: 'auth'
