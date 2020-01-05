@@ -138,6 +138,7 @@ describe('core / main', () => {
 
   describe('_validateOptions', () => {
     it.skip('should validate options', () => {
+      // TODO: implement it
     });
   });
 
@@ -198,6 +199,7 @@ describe('core / main', () => {
 
   describe('_followRedirects', () => {
     it.skip('should follow redirects', () => {
+      // TODO: implement it
     });
   });
 });

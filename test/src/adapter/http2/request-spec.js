@@ -30,6 +30,7 @@ describe('adapter / http2 / request', () => {
   });
 
   describe.skip('performRequest', () => {
+    // TODO: implement it
   });
 
   describe('_getOutgoingHeaders', () => {

@@ -57,7 +57,7 @@ class NSendRequestOptionsBuilder {
   }
 
   _parseProxy() {
-    // TODO: implement
+    // TODO: implement it
   }
 
   _buildOptions() {

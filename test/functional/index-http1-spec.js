@@ -303,7 +303,7 @@ describe('http1 / functional tests', () => {
       };
     }
 
-    it('should send the JSON data', (done) => {
+    it('should send JSON data', (done) => {
       let options = {
         method: 'POST',
         url: 'http://localhost:3010/users',
@@ -329,7 +329,7 @@ describe('http1 / functional tests', () => {
       _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it('should send the Buffer data', (done) => {
+    it('should send Buffer data', (done) => {
       let options = {
         method: 'PUT',
         url: 'http://localhost:3010/users',
@@ -355,7 +355,7 @@ describe('http1 / functional tests', () => {
       _createServer(handler(), _test(options, statusCode, expected, done));
     });
 
-    it.skip('should send the Stream data', (done) => {
+    it.skip('should send Stream data', (done) => {
       // TODO: doesn't work
       let options = {
         method: 'PATCH',
@@ -625,9 +625,11 @@ describe('http1 / functional tests', () => {
 
   describe('responseEncoding', () => {
     it.skip('should use options.responseEncoding=utf8', () => {
+      // TODO: implement it
     });
 
     it.skip('should use options.responseEncoding=utf16', () => {
+      // TODO: implement it
     });
   });
 });

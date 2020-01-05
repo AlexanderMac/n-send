@@ -33,6 +33,7 @@ describe('adapter / http1 / request', () => {
   });
 
   describe.skip('performRequest', () => {
+    // TODO: doesn't work
     let fakeReq = {
       on: () => {},
       abort: () => {},
