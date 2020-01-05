@@ -1,3 +1,10 @@
+# <sub>v0.4.0</sub>
+#### _Jan_. 5, 2020_
+  * Add support for HTTP/2.
+  * Drop support for node v8, require at least node v10.
+  * Update packages to the latest versions.
+  * Refactor codebase, rewrite tests.
+
 # <sub>v0.3.2</sub>
 #### _Nov_. 2, 2019_
   * Remember response redirects history.
