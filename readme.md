@@ -19,9 +19,13 @@
 ```js
 const nsend = require('nsend');
 
-const res1 = await nsend({ url: 'http://example.com' });
-// OR
-const res2 = await nsend.get('http://example.com');
+try {
+  const res1 = await nsend({ url: 'http://example.com' });
+  // OR
+  const res2 = await nsend.get('http://example.com');
+} catch (err) {
+  console.error(err);
+}
 ```
 
 ## API
