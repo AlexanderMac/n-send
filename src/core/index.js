@@ -73,7 +73,7 @@ class NSendCore {
       headers: res.headers
     });
     if (res.statusCode !== 307 && !_.includes(consts.SAFE_METHODS, this.method)) {
-      this.method = 'GET';
+      this.method = 'get';
       this.headers = _.reduce(this.headers, (result, value, name) => {
         if (!/^content-/i.test(name)) {
           result[name] = value;

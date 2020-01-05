@@ -1,6 +1,7 @@
-type HttpVer = 
-  | 'http/1'
-  | 'http/2';
+type ProtocolVersion =
+  | 'http/1.0'
+  | 'http/1.1'
+  | 'http/2.0';
 
 type Method =
   | 'get' | 'GET'
@@ -11,13 +12,13 @@ type Method =
   | 'put' | 'PUT'
   | 'patch' | 'PATCH';
 
-type ResponseType = 
+type ResponseType =
   | 'json'
   | 'text'
   | 'stream';
 
 interface NSendRequestOptions {
-  httpVer?: HttpVer,
+  protocolVersion?: ProtocolVersion,
   method?: Method;
   baseUrl?: string;
   url?: string;

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const consts = require('../consts');
-const request = require('./http1/request');
+const request1 = require('./http1/request');
+const request2 = require('./http2/request');
 
 class NSendAdapter {
   static performRequest(options) {
@@ -8,7 +9,8 @@ class NSendAdapter {
     return instance.performRequest();
   }
 
-  constructor(options) {
+  constructor({ protocolVersion, ...options }) {
+    this.protocolVersion = protocolVersion;
     this.options = options;
   }
 
@@ -21,18 +23,26 @@ class NSendAdapter {
           resolve(result);
         }
       };
-      this._performRequest();
+      let reqOptions = this._getRequestOptions();
+      switch (this.protocolVersion) {
+        case consts.HTTP_VERSIONS.http10:
+        case consts.HTTP_VERSIONS.http11:
+          this.req = request1.performRequest(reqOptions);
+          break;
+        case consts.HTTP_VERSIONS.http20:
+          this.req = request2.performRequest(reqOptions);
+          break;
+      }
     }).finally(() => this._cleanup());
   }
 
-  _performRequest() {
-    let reqOptions = _.chain(this.options)
+  _getRequestOptions() {
+    return _.chain(this.options)
       .pick(consts.REQUEST_OPTION_KEYS)
       .extend({
         done: this.done
       })
       .value();
-    this.req = request.performRequest(reqOptions);
   }
 
   _cleanup() {

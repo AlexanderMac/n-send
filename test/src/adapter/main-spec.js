@@ -1,11 +1,12 @@
 const sinon = require('sinon');
 const nassert = require('n-assert');
 const Adapter = require('../../../src/adapter');
-const request = require('../../../src/adapter/http1/request');
+const request1 = require('../../../src/adapter/http1/request');
+const request2 = require('../../../src/adapter/http2/request');
 
 describe('adapter / main', () => {
-  function getInstance() {
-    return new Adapter();
+  function getInstance(options = {}) {
+    return new Adapter(options);
   }
 
   describe('static performRequest', () => {
@@ -31,28 +32,56 @@ describe('adapter / main', () => {
   });
 
   describe('performRequest', () => {
-    it('should return promise, call internal _performRequest and _cleanup', async () => {
-      let instance = getInstance();
-      sinon.stub(instance, '_performRequest').callsFake(() => instance.done());
+    beforeEach(() => {
+      sinon.stub(request1, 'performRequest');
+      sinon.stub(request2, 'performRequest');
+    });
+
+    afterEach(() => {
+      request1.performRequest.restore();
+      request2.performRequest.restore();
+    });
+
+    async function test({ protocolVersion, expected, request1Args, request2Args }) {
+      let instance = getInstance({ protocolVersion });
+      request1.performRequest.callsFake(() => {
+        instance.done();
+        return 'req1';
+      });
+      request2.performRequest.callsFake(() => {
+        instance.done();
+        return 'req2';
+      });
+      sinon.stub(instance, '_getRequestOptions').returns('reqOptions');
       sinon.stub(instance, '_cleanup');
 
       await instance.performRequest();
 
-      nassert.assertFn({ inst: instance, fnName: '_performRequest', expectedArgs: '_without-args_' });
+      nassert.assert(instance.req, expected);
+      nassert.assertFn({ inst: request1, fnName: 'performRequest', expectedArgs: request1Args });
+      nassert.assertFn({ inst: request2, fnName: 'performRequest', expectedArgs: request2Args });
       nassert.assertFn({ inst: instance, fnName: '_cleanup', expectedArgs: '_without-args_' });
+    }
+
+    it('should call request1.performRequest when protocolVersion is http/1.1', () => {
+      let protocolVersion = 'http/1.1';
+      let expected = 'req1';
+      let request1Args = 'reqOptions';
+
+      return test({ protocolVersion, expected, request1Args });
+    });
+
+    it('should call request2.performRequest when protocolVersion is http/2.0', () => {
+      let protocolVersion = 'http/2.0';
+      let expected = 'req2';
+      let request2Args = 'reqOptions';
+
+      return test({ protocolVersion, expected, request2Args });
     });
   });
 
-  describe('_performRequest', () => {
-    before(() => {
-      sinon.stub(request, 'performRequest');
-    });
-
-    after(() => {
-      request.performRequest.restore();
-    });
-
-    it('should build request options and call request.performRequest', () => {
+  describe('_getRequestOptions', () => {
+    it('should return request options', () => {
       let instance = getInstance();
       instance.options = {
         method: 'post',
@@ -62,7 +91,9 @@ describe('adapter / main', () => {
         responseType: 'text',
         responseEncoding: 'utf16'
       };
-      let reqOptions = {
+
+      let actual = instance._getRequestOptions();
+      let expected = {
         method: 'post',
         url: 'https://example.com',
         timeout: 5000,
@@ -72,13 +103,7 @@ describe('adapter / main', () => {
         done: instance.done
       };
 
-      request.performRequest.returns('req');
-
-      instance._performRequest();
-      let expected = 'req';
-
-      nassert.assert(instance.req, expected);
-      nassert.assertFn({ inst: request, fnName: 'performRequest', expectedArgs: reqOptions });
+      nassert.assert(actual, expected);
     });
   });
 

@@ -13,6 +13,7 @@
 - Request cancelation (TODO)
 - Retries on failure (TODO)
 - Timeout handling
+- HTTP/2 support
 
 ## Usage
 ```js
@@ -29,6 +30,9 @@ const res2 = await nsend.get('http://example.com');
 
 ```js
 {
+  // HTTP protocol version: http/1.0, http/1.1 or http/2.0
+  protocolVersion: 'http/1.1', // default
+
   // `baseUrl` to resolve against if the input is not absolute
   baseUrl: 'https://example.com/api',
 

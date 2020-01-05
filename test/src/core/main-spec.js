@@ -5,8 +5,8 @@ const Core = require('../../../src/core');
 const adapter = require('../../../src/adapter');
 
 describe('core / main', () => {
-  function getInstance() {
-    return new Core();
+  function getInstance(options = {}) {
+    return new Core(options);
   }
 
   describe('static getInstance', () => {
@@ -81,7 +81,7 @@ describe('core / main', () => {
 
       instance._mergeOptions(options);
       let expected = {
-        httpVer: 'http/1',
+        protocolVersion: 'http/1.1',
         method: 'get',
         url: 'https://example.com/users',
         maxContentLength: 10000,
@@ -96,7 +96,7 @@ describe('core / main', () => {
     it('should merge options with default when many options are provided', () => {
       let instance = getInstance();
       let options = {
-        httpVer: 'http/2',
+        protocolVersion: 'http/2.0',
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -123,7 +123,7 @@ describe('core / main', () => {
       let expected = _.chain(options)
         .cloneDeep()
         .extend({
-          httpVer: 'http/2',
+          protocolVersion: 'http/2.0',
           method: 'post',
           headers: {
             'content-type': 'text/plain',
@@ -145,7 +145,7 @@ describe('core / main', () => {
     it('should build adapter options object', () => {
       let instance = getInstance();
       _.extend(instance, {
-        httpVer: 'http/2',
+        protocolVersion: 'http/2.0',
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',
@@ -170,7 +170,7 @@ describe('core / main', () => {
 
       let actual = instance._getAdapterOptions();
       let expected = {
-        httpVer: 'http/2',
+        protocolVersion: 'http/2.0',
         method: 'POST',
         baseUrl: 'https://example.com',
         url: '/users',

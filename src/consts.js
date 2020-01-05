@@ -1,5 +1,5 @@
 const BASE_OPTION_KEYS = {
-  httpVer: 'httpVer',
+  protocolVersion: 'protocolVersion',
   method: 'method',
   baseUrl: 'baseUrl',
   url: 'url',
@@ -14,8 +14,14 @@ const BASE_OPTION_KEYS = {
   responseEncoding: 'responseEncoding'
 };
 
+const HTTP_VERSIONS = {
+  http10: 'http/1.0',
+  http11: 'http/1.1',
+  http20: 'http/2.0'
+};
+
 const DEFAULT_OPTIONS = {
-  [BASE_OPTION_KEYS.httpVer]: 'http/1',
+  [BASE_OPTION_KEYS.protocolVersion]: HTTP_VERSIONS.http11,
   [BASE_OPTION_KEYS.method]: 'get',
   [BASE_OPTION_KEYS.maxContentLength]: 10000,
   [BASE_OPTION_KEYS.maxRedirects]: 0,
@@ -24,7 +30,7 @@ const DEFAULT_OPTIONS = {
 };
 
 const CORE_OPTION_KEYS = [
-  BASE_OPTION_KEYS.httpVer,
+  BASE_OPTION_KEYS.protocolVersion,
   BASE_OPTION_KEYS.method,
   BASE_OPTION_KEYS.baseUrl,
   BASE_OPTION_KEYS.url,
@@ -40,7 +46,7 @@ const CORE_OPTION_KEYS = [
 ];
 
 const ADAPTER_OPTION_KEYS = [
-  BASE_OPTION_KEYS.httpVer,
+  BASE_OPTION_KEYS.protocolVersion,
   BASE_OPTION_KEYS.method,
   BASE_OPTION_KEYS.baseUrl,
   BASE_OPTION_KEYS.url,
@@ -77,6 +83,7 @@ const RESPONSE_OPTION_KEYS = [
 const SAFE_METHODS = ['get', 'head', 'options', 'trace'];
 
 module.exports = {
+  HTTP_VERSIONS,
   DEFAULT_OPTIONS,
   CORE_OPTION_KEYS,
   ADAPTER_OPTION_KEYS,
