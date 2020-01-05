@@ -4,8 +4,9 @@ const https = require('https');
 const consts = require('../../consts');
 const NSendError = require('../../error');
 const checks = require('../../utils/checks');
-const reqOptionsBuilder = require('../request-options-builder');
 const response = require('./response');
+const reqOptionsBuilder = require('../request-options-builder');
+const dataTransformers = require('../data-transformers');
 
 class NSendRequest {
   static performRequest(options) {
@@ -24,7 +25,7 @@ class NSendRequest {
     let reqOptions = _.pick(this.options, consts.REQUEST_OPTION_KEYS);
     reqOptions = reqOptionsBuilder.build(reqOptions);
 
-    let data = this._transformRequestData(reqOptions.headers, this.data);
+    let data = dataTransformers.transformRequestData(this.data, reqOptions.headers);
     let transport = this._getTransport(reqOptions.protocol);
     this.req = transport.request(reqOptions, this._processResponse.bind(this));
 
@@ -59,29 +60,6 @@ class NSendRequest {
   _getTransport(protocol) {
     let isHttps = protocol === 'https:';
     return isHttps ? https : http;
-  }
-
-  _transformRequestData(headers, data) {
-    if (checks.isNil(data)) {
-      return data;
-    }
-    if (checks.isStream(data)) {
-      return data;
-    }
-
-    if (checks.isBuffer(data)) {
-      // Nothing
-    } else if (checks.isString(data)) {
-      data = Buffer.from(data, 'utf8');
-    } else if (checks.isObject(data)) {
-      data = JSON.stringify(data);
-      data = Buffer.from(data, 'utf8');
-    } else {
-      throw new NSendError('Data must be Stream, Buffer, Object or String');
-    }
-    headers['content-length'] = data.length;
-
-    return data;
   }
 
   _processResponse(res) {

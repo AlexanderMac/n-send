@@ -3,10 +3,6 @@ const nassert = require('n-assert');
 const Response = require('../../../../src/adapter/http1/response');
 
 describe('adapter / http1 / response', () => {
-  function getInstance(options = {}) {
-    return new Response(options);
-  }
-
   describe('static processResponse', () => {
     beforeEach(() => {
       sinon.stub(Response.prototype, 'processResponse');
@@ -26,17 +22,6 @@ describe('adapter / http1 / response', () => {
       let expected = res;
       nassert.assert(actual, expected);
       nassert.assertFn({ inst: Response.prototype, fnName: 'processResponse', expectedArgs: '_without-args_' });
-    });
-  });
-
-  describe('_transformResponseData', () => {
-    it('should transform response data', () => {
-      let instance = getInstance();
-
-      let actual = instance._transformResponseData('some-data');
-
-      let expected = 'some-data';
-      nassert.assert(actual, expected);
     });
   });
 });

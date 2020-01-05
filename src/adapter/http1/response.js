@@ -1,6 +1,6 @@
-const _ = require('lodash');
 const zlib = require('zlib');
 const NSendError = require('../../error');
+const dataTransformers = require('../data-transformers');
 
 class NSendResponse {
   static processResponse(options) {
@@ -70,19 +70,9 @@ class NSendResponse {
 
     this.resStream.on('end', () => {
       let resData = Buffer.concat(resDataBuffer).toString(this.responseEncoding);
-      this.response.data = this._transformResponseData(resData);
+      this.response.data = dataTransformers.transformResponseData(resData, this.responseType);
       this.done(this.response);
     });
-  }
-
-  _transformResponseData(data) {
-    if (this.responseType === 'json') {
-      let parsedData = _.attempt(JSON.parse.bind(null, data));
-      if (!_.isError(parsedData)) {
-        return parsedData;
-      }
-    }
-    return data;
   }
 }
 
