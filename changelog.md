@@ -1,7 +1,7 @@
 # <sub>v0.4.0</sub>
 #### _Jan. 5, 2020_
   * Add support for HTTP/2.
-  * Drop support for node v8, require at least node v10.
+  * Drop support for node v8.
   * Update packages to the latest versions.
   * Refactor codebase, rewrite tests.
 
