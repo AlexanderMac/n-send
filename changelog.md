@@ -1,3 +1,7 @@
+# <sub>v0.5.1</sub>
+#### _May. 20, 2020_
+  * Fix critical issue in http2 adapter.
+
 # <sub>v0.5.0</sub>
 #### _May. 20, 2020_
   * Return `reqHeaders` object in the response for both http1 and http2 adapters.
