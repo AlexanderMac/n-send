@@ -41,7 +41,7 @@ class NSendResponse {
       statusCode: this.res.statusCode,
       statusText: this.res.statusMessage,
       headers: this.res.headers,
-      request: this.req
+      reqHeaders: this.req.getHeaders()
     };
     if (this.responseType === 'stream') {
       this.response.data = this.resStream;

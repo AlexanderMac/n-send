@@ -55,7 +55,7 @@ describe('adapter / http2 / request', () => {
     });
   });
 
-  describe('_getResponseHeaders', () => {
+  describe('_omitPseudoHeaders', () => {
     it('should filter out pseudo-headers from response headers', () => {
       let instance = getInstance();
       let resHeaders = {
@@ -64,7 +64,7 @@ describe('adapter / http2 / request', () => {
         'content-length': 150
       };
 
-      let actual = instance._getResponseHeaders(resHeaders);
+      let actual = instance._omitPseudoHeaders(resHeaders);
       let expected = {
         'content-encoding': 'utf8',
         'content-length': 150

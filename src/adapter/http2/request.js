@@ -66,8 +66,8 @@ class NSendRequest2 {
       this.done({
         statusCode: resHeaders[HTTP2_HEADER_STATUS],
         statusText: '', // for http/2 is undefined
-        headers: this._getResponseHeaders(resHeaders),
-        request: this.req,
+        headers: this._omitPseudoHeaders(resHeaders),
+        reqHeaders: this._omitPseudoHeaders(req.sentHeaders),
         data: resData
       });
       client.close();
@@ -85,7 +85,7 @@ class NSendRequest2 {
     });
   }
 
-  _getResponseHeaders(resHeaders) {
+  _omitPseudoHeaders(resHeaders) {
     return _.reduce(resHeaders, (result, value, name) => {
       if (!_.startsWith(name, ':')) {
         result[name] = value;
