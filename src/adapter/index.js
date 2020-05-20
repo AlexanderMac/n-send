@@ -2,6 +2,7 @@ const _ = require('lodash');
 const consts = require('../consts');
 const request1 = require('./http1/request');
 const request2 = require('./http2/request');
+const NSendError = require('../error');
 
 class NSendAdapter {
   static performRequest(options) {
@@ -24,7 +25,7 @@ class NSendAdapter {
         }
       };
       let reqOptions = this._getRequestOptions();
-      switch (this.protocolVersion) {
+      switch (_.toLower(this.protocolVersion)) {
         case consts.HTTP_VERSIONS.http10:
         case consts.HTTP_VERSIONS.http11:
           this.req = request1.performRequest(reqOptions);
@@ -32,6 +33,8 @@ class NSendAdapter {
         case consts.HTTP_VERSIONS.http20:
           this.req = request2.performRequest(reqOptions);
           break;
+        default:
+          throw new NSendError('Unsupported protocolVersion');
       }
     }).finally(() => this._cleanup());
   }
