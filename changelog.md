@@ -1,3 +1,7 @@
+# <sub>v0.5.0</sub>
+#### _May. 20, 2020_
+  * Return `reqHeaders` object in the response for both http1 and http2 adapters.
+
 # <sub>v0.4.0</sub>
 #### _Jan. 5, 2020_
   * Add support for HTTP/2.
