@@ -63,13 +63,15 @@ class NSendRequest2 {
     req.on('end', () => {
       let resData = Buffer.concat(resDataBuffer).toString(this.responseEncoding);
       resData = dataTransformers.transformResponseData(resData, this.responseType);
-      this.done({
-        statusCode: resHeaders[HTTP2_HEADER_STATUS],
-        statusText: '', // for http/2 is undefined
-        headers: this._omitPseudoHeaders(resHeaders),
-        reqHeaders: this._omitPseudoHeaders(req.sentHeaders),
-        data: resData
-      });
+      if (resHeaders) {
+        this.done({
+          statusCode: resHeaders[HTTP2_HEADER_STATUS],
+          statusText: '', // for http/2 is undefined
+          headers: this._omitPseudoHeaders(resHeaders),
+          reqHeaders: this._omitPseudoHeaders(req.sentHeaders),
+          data: resData
+        });
+      }
       client.close();
     });
 
