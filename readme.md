@@ -1,6 +1,6 @@
 # n-send
 
-[![Build Status](https://travis-ci.org/AlexanderMac/n-send.svg?branch=master)](https://travis-ci.org/AlexanderMac/n-send)
+[![Build Status](https://github.com/AlexanderMac/n-send/workflows/CI/badge.svg)](https://github.com/AlexanderMac/n-send/actions?query=workflow%3ACI)
 [![Code Coverage](https://codecov.io/gh/AlexanderMac/n-send/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderMac/n-send)
 [![npm version](https://badge.fury.io/js/n-send.svg)](https://badge.fury.io/js/n-send)
 
@@ -17,14 +17,14 @@
 
 ## Usage
 ```js
-const nsend = require('nsend');
+const nsend = require('nsend')
 
 try {
-  const res1 = await nsend({ url: 'http://example.com' });
+  const res1 = await nsend({ url: 'http://example.com' })
   // OR
-  const res2 = await nsend.get('http://example.com');
+  const res2 = await nsend.get('http://example.com')
 } catch (err) {
-  console.error(err);
+  console.error(err)
 }
 ```
 
@@ -93,7 +93,7 @@ try {
 There are aliases for all supported request methods.
 
 ```js
-const nsend = require('nsend');
+const nsend = require('nsend')
 
 nsend.request(options?)
 nsend.get(url, options?)
