@@ -1,10 +1,10 @@
 module.exports = class NSendError extends Error {
   constructor(message, details) {
-    super(message);
+    super(message)
 
-    this.name = this.constructor.name;
-    this.details = details;
+    this.name = this.constructor.name
+    this.details = details
 
-    Error.captureStackTrace(this, this.constructor);
+    Error.captureStackTrace(this, this.constructor)
   }
-};
+}

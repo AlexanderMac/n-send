@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const Core = require('./');
+const _ = require('lodash')
+const Core = require('./')
 
 exports.extend = (nsend) => {
   _.each(['get', 'head', 'options', 'delete'], (method) => {
@@ -7,9 +7,9 @@ exports.extend = (nsend) => {
       return Core.send(_extendOptions(options, {
         method,
         url
-      }));
-    };
-  });
+      }))
+    }
+  })
 
   _.each(['post', 'put', 'patch'], (method) => {
     nsend[method] = (url, data, options) => {
@@ -17,14 +17,14 @@ exports.extend = (nsend) => {
         method,
         url,
         data
-      }));
-    };
-  });
-};
+      }))
+    }
+  })
+}
 
 function _extendOptions(options, ex) {
   return _.chain(options)
     .cloneDeep()
     .extend(ex)
-    .value();
+    .value()
 }

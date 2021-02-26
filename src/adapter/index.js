@@ -1,42 +1,42 @@
-const _ = require('lodash');
-const consts = require('../consts');
-const request1 = require('./http1/request');
-const request2 = require('./http2/request');
-const NSendError = require('../error');
+const _ = require('lodash')
+const consts = require('../consts')
+const request1 = require('./http1/request')
+const request2 = require('./http2/request')
+const NSendError = require('../error')
 
 class NSendAdapter {
   static performRequest(options) {
-    let instance = new NSendAdapter(options);
-    return instance.performRequest();
+    let instance = new NSendAdapter(options)
+    return instance.performRequest()
   }
 
   constructor({ protocolVersion, ...options }) {
-    this.protocolVersion = protocolVersion;
-    this.options = options;
+    this.protocolVersion = protocolVersion
+    this.options = options
   }
 
   performRequest() {
     return new Promise((resolve, reject) => {
       this.done = (result) => {
         if (_.isError(result)) {
-          reject(result);
+          reject(result)
         } else {
-          resolve(result);
+          resolve(result)
         }
-      };
-      let reqOptions = this._getRequestOptions();
+      }
+      let reqOptions = this._getRequestOptions()
       switch (_.toLower(this.protocolVersion)) {
         case consts.HTTP_VERSIONS.http10:
         case consts.HTTP_VERSIONS.http11:
-          this.req = request1.performRequest(reqOptions);
-          break;
+          this.req = request1.performRequest(reqOptions)
+          break
         case consts.HTTP_VERSIONS.http20:
-          this.req = request2.performRequest(reqOptions);
-          break;
+          this.req = request2.performRequest(reqOptions)
+          break
         default:
-          throw new NSendError('Unsupported protocolVersion');
+          throw new NSendError('Unsupported protocolVersion')
       }
-    }).finally(() => this._cleanup());
+    }).finally(() => this._cleanup())
   }
 
   _getRequestOptions() {
@@ -45,15 +45,15 @@ class NSendAdapter {
       .extend({
         done: this.done
       })
-      .value();
+      .value()
   }
 
   _cleanup() {
     if (this.req) {
-      this.req.finalize();
-      this.req = null;
+      this.req.finalize()
+      this.req = null
     }
   }
 }
 
-module.exports = NSendAdapter;
+module.exports = NSendAdapter
