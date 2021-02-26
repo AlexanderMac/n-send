@@ -10,12 +10,14 @@
     "src"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=12",
+    "npm": ">=7"
   },
   "scripts": {
     "lint": "eslint --ext .js src/ test/",
     "test": "NODE_ENV=test mocha",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
+    "coverage-gh": "nyc --reporter=lcov npm test && codecov"
   },
   "repository": {
     "type": "git",
@@ -40,8 +42,8 @@
   },
   "devDependencies": {
     "eslint": "^7.0.0",
-    "mocha": "^7.1.2",
-    "n-assert": "^5.0.2",
+    "mocha": "^8.3.0",
+    "n-assert": "^7.0.0",
     "nyc": "^15.0.1",
     "should": "^13.2.3",
     "sinon": "^9.0.2"
