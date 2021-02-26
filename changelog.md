@@ -1,3 +1,8 @@
+# <sub>v0.6.0</sub>
+#### _Feb. 26, 2021_
+  * Drop support for Node versions prior to v12.
+  * Update dependencies.
+
 # <sub>v0.5.1</sub>
 #### _May. 20, 2020_
   * Fix critical issue in http2 adapter.
