@@ -4,7 +4,7 @@
 [![Code Coverage](https://codecov.io/gh/AlexanderMac/n-send/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderMac/n-send)
 [![npm version](https://badge.fury.io/js/n-send.svg)](https://badge.fury.io/js/n-send)
 
-## Features
+### Features
 
 - Simple configuration object
 - Promise API
@@ -15,7 +15,12 @@
 - Timeout handling
 - HTTP/2 support
 
-## Usage
+### Install
+```bash
+npm i n-send
+```
+
+### Usage
 ```js
 const nsend = require('nsend')
 
@@ -28,9 +33,9 @@ try {
 }
 ```
 
-## API
+### API
 
-### NSend Options
+##### NSend Options
 
 ```js
 {
@@ -88,7 +93,7 @@ try {
 }
 ```
 
-### Request method aliases
+##### Request method aliases
 
 There are aliases for all supported request methods.
 
@@ -105,8 +110,8 @@ nsend.put(url, data?, options?)
 nsend.patch(url, data?, options?)
 ```
 
-## Author
-Alexander Mac
-
-## Licence
+### Licence
 Licensed under the MIT license.
+
+### Author
+Alexander Mac
