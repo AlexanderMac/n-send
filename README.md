@@ -1,5 +1,7 @@
 # n-send
 
+## WARNING :warning:: This repo is not maintained anymore.
+
 [![Build Status](https://github.com/AlexanderMac/n-send/workflows/CI/badge.svg)](https://github.com/AlexanderMac/n-send/actions?query=workflow%3ACI)
 [![Code Coverage](https://codecov.io/gh/AlexanderMac/n-send/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderMac/n-send)
 [![npm version](https://badge.fury.io/js/n-send.svg)](https://badge.fury.io/js/n-send)
